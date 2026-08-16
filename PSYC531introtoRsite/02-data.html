@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Working with data · PSYC531 Introduction to R</title>
+<meta name="description" content="PSYC531 introduction to R and RStudio for social science students.">
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#f6f8fb; --bg-side:#fbfcfe;
+  --text:#1e2430; --muted:#5f6a7a; --border:#e4e9f0;
+  --accent:#1f6bb8; --accent-soft:#e8f1fb;
+  --code-bg:#f6f8fa; --code-text:#242c39;
+  --c-comment:#6a8759; --c-string:#22863a; --c-num:#8250df;
+  --c-fun:#1f6bb8; --c-op:#b3457a; --c-kw:#cf222e;
+  --shadow:0 1px 2px rgba(20,30,50,.05),0 8px 24px rgba(20,30,50,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f141c; --bg-soft:#161d28; --bg-side:#121824;
+  --text:#dde3ec; --muted:#94a0b1; --border:#252e3d;
+  --accent:#69a7f0; --accent-soft:#16233a;
+  --code-bg:#161d28; --code-text:#dde3ec;
+  --c-comment:#8b9c74; --c-string:#7ee787; --c-num:#d2a8ff;
+  --c-fun:#79c0ff; --c-op:#ff9bce; --c-kw:#ff7b72;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- sidebar ---------- */
+.sidebar{
+  position:fixed; top:0; left:0; width:300px; height:100vh; overflow-y:auto;
+  background:var(--bg-side); border-right:1px solid var(--border); padding:26px 20px 40px;
+  z-index:40;
+}
+.brand{display:block;margin-bottom:22px}
+.brand .course{font-size:1.12rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.brand .sub{display:block;font-size:.83rem;color:var(--muted);margin-top:2px}
+.brand:hover{text-decoration:none}
+.toc{list-style:none;margin:0;padding:0}
+.toc>li{margin-bottom:2px}
+.toc>li>a{
+  display:block;padding:8px 12px;border-radius:8px;color:var(--text);
+  font-size:.93rem;line-height:1.4;border-left:3px solid transparent;
+}
+.toc>li>a:hover{background:var(--bg-soft);text-decoration:none}
+.toc .num{display:block;font-size:.71rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.toc>li.active>a{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+.toc>li.active .num{color:var(--accent)}
+.subtoc{list-style:none;margin:4px 0 10px;padding:0 0 0 15px;border-left:1px solid var(--border)}
+.subtoc a{display:block;padding:4px 10px;font-size:.845rem;color:var(--muted);border-radius:6px}
+.subtoc a:hover{color:var(--text);background:var(--bg-soft);text-decoration:none}
+.subtoc a.here{color:var(--accent);font-weight:600}
+.side-foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted)}
+.side-foot code{font-size:.78rem}
+
+/* ---------- layout ---------- */
+main{margin-left:300px;padding:0 40px 80px}
+.wrap{max-width:47rem;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:10px;justify-content:flex-end;padding:14px 0 0}
+.iconbtn{
+  background:var(--bg-soft);border:1px solid var(--border);color:var(--muted);
+  width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:15px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.iconbtn:hover{color:var(--text);border-color:var(--accent)}
+#menuBtn{display:none;position:fixed;top:12px;left:12px;z-index:50;background:var(--bg);box-shadow:var(--shadow)}
+
+.chaplabel{
+  display:inline-block;margin:34px 0 6px;padding:4px 11px;border-radius:99px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:.74rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+}
+h1{font-size:2.2rem;line-height:1.2;letter-spacing:-.022em;margin:.1em 0 .35em}
+.readtime{color:var(--muted);font-size:.87rem;margin:0 0 30px}
+h2{font-size:1.42rem;letter-spacing:-.014em;margin:2.4em 0 .7em;padding-top:.5em;border-top:1px solid var(--border)}
+h3{font-size:1.11rem;margin:1.9em 0 .5em}
+p,ul,ol,table,pre{margin:0 0 1.15em}
+ul,ol{padding-left:1.35em}
+li{margin-bottom:.4em}
+hr{display:none}  /* section rules come from the h2 border instead */
+strong{font-weight:650}
+blockquote{margin:0 0 1.15em;padding:.3em 0 .3em 1.1em;border-left:3px solid var(--border);color:var(--muted)}
+
+/* ---------- code ---------- */
+code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-size:.86em}
+p code,li code,td code,h2 code,h3 code,summary code{
+  background:var(--bg-soft);border:1px solid var(--border);
+  padding:.1em .38em;border-radius:5px;white-space:nowrap;
+}
+div.sourceCode,pre:not(.sourceCode *){position:relative}
+pre{
+  background:var(--code-bg);color:var(--code-text);border:1px solid var(--border);
+  border-radius:10px;padding:15px 17px;overflow-x:auto;font-size:.9rem;line-height:1.62;
+}
+pre code{background:none;border:none;padding:0;font-size:inherit;white-space:pre}
+.sourceCode .co{color:var(--c-comment);font-style:italic}
+.sourceCode .st{color:var(--c-string)}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:var(--c-num)}
+.sourceCode .fu{color:var(--c-fun)}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:var(--c-op)}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:var(--c-kw)}
+.codewrap{position:relative;margin:0 0 1.15em}
+.codewrap pre{margin:0}
+.copybtn{
+  position:absolute;top:8px;right:8px;padding:4px 9px;font-size:.73rem;font-weight:600;
+  color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:7px;
+  cursor:pointer;opacity:0;transition:opacity .15s;
+}
+.codewrap:hover .copybtn,.copybtn:focus{opacity:1}
+.copybtn:hover{color:var(--accent);border-color:var(--accent)}
+.copybtn.done{color:#1a7f37;border-color:#1a7f37}
+
+/* ---------- tables ---------- */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-soft);font-weight:650}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--bg-soft) 55%,transparent)}
+
+/* ---------- callouts ---------- */
+.callout{
+  border:1px solid var(--border);border-left:4px solid var(--accent);
+  background:var(--bg-soft);border-radius:9px;padding:14px 18px 2px;margin:0 0 1.3em;
+}
+.callout>*:last-child{margin-bottom:14px}
+.callout-label{
+  font-size:.74rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  margin:0 0 .5em;color:var(--accent);
+}
+.callout-note{border-left-color:#3b82f6}.callout-note .callout-label{color:#3b82f6}
+.callout-tip{border-left-color:#16a34a}.callout-tip .callout-label{color:#16a34a}
+.callout-important{border-left-color:#7c3aed}.callout-important .callout-label{color:#7c3aed}
+.callout-warning{border-left-color:#d97706}.callout-warning .callout-label{color:#d97706}
+.callout-caution{border-left-color:#dc2626}.callout-caution .callout-label{color:#dc2626}
+
+/* ---------- details ---------- */
+details{
+  border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);
+  margin:0 0 1.3em;overflow:hidden;
+}
+details[open]{background:var(--bg);box-shadow:var(--shadow)}
+summary{
+  cursor:pointer;padding:12px 16px 12px 38px;font-weight:600;font-size:.96rem;
+  list-style:none;position:relative;color:var(--accent);
+}
+summary::-webkit-details-marker{display:none}
+summary::before{
+  content:"";position:absolute;left:16px;top:50%;width:6px;height:6px;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:translateY(-70%) rotate(-45deg);transition:transform .18s;
+}
+details[open]>summary::before{transform:translateY(-50%) rotate(45deg)}
+summary:hover{background:var(--accent-soft)}
+details>*:not(summary){padding-left:16px;padding-right:16px}
+details>*:last-child{margin-bottom:14px}
+details br:first-of-type{display:none}
+details b{font-weight:650}
+
+/* ---------- task list ---------- */
+ul.task-list{list-style:none;padding-left:.1em}
+ul.task-list li{margin-bottom:.6em}
+ul.task-list label{display:flex;align-items:flex-start;gap:.7em;cursor:pointer}
+ul.task-list input[type=checkbox]{
+  width:1.1em;height:1.1em;margin:.33em 0 0;accent-color:var(--accent);cursor:pointer;flex:none;
+}
+ul.task-list li.done{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--border)}
+
+/* ---------- pager ---------- */
+.pager{display:flex;gap:14px;margin:56px 0 0;padding-top:26px;border-top:1px solid var(--border)}
+.pager a{
+  flex:1;border:1px solid var(--border);border-radius:11px;padding:14px 17px;
+  background:var(--bg-soft);color:var(--text);
+}
+.pager a:hover{border-color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.pager .dir{display:block;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.pager .ttl{font-weight:650;font-size:.97rem}
+.pager .next{text-align:right}
+.pager .ghost{visibility:hidden}
+.pagefoot{margin-top:34px;color:var(--muted);font-size:.82rem;text-align:center}
+
+.backdrop{display:none;position:fixed;inset:0;background:rgba(10,15,25,.42);z-index:35}
+
+@media(max-width:980px){
+  body{font-size:16.5px}
+  .sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  body.nav-open .sidebar{transform:none}
+  body.nav-open .backdrop{display:block}
+  main{margin-left:0;padding:0 20px 70px}
+  #menuBtn{display:inline-flex}
+  .topbar{padding-top:12px}
+  h1{font-size:1.8rem}
+  .pager{flex-direction:column}
+}
+@media print{
+  .sidebar,.pager,.topbar,#menuBtn,.copybtn{display:none}
+  main{margin:0}
+  details{border:none} details>*:not(summary){padding:0}
+  details:not([open])>*:not(summary){display:block}
+}
+</style>
+</head>
+<body data-page="02-data.html">
+<button id="menuBtn" class="iconbtn" type="button" aria-label="Menu">☰</button>
+<div class="backdrop"></div>
+<aside class="sidebar">
+  <a class="brand" href="index.html">
+    <span class="course">PSYC531</span>
+    <span class="sub">Introduction to R</span>
+  </a>
+  <ul class="toc">
+<li><a href="index.html"><span class="num">Start here</span>Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="num">Lesson 0</span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="num">Lesson 1</span>R basics</a>
+</li>
+<li class="active"><a href="02-data.html"><span class="num">Lesson 2</span>Working with data</a>
+<ul class="subtoc">
+<li><a href="#1-a-dataset-to-practise-on">1. A dataset to practise on</a></li>
+<li><a href="#2-looking-at-your-data">2. Looking at your data</a></li>
+<li><a href="#3-getting-one-variable-the--sign">3. Getting one variable: the
+$ sign</a></li>
+<li><a href="#4-opening-your-own-data-file">4. Opening your own data file</a></li>
+<li><a href="#5-typing-in-a-small-dataset-yourself">5. Typing in a small
+dataset yourself</a></li>
+<li><a href="#6-picking-out-rows-and-columns">6. Picking out rows and
+columns</a></li>
+<li><a href="#7-adding-a-new-variable">7. Adding a new variable</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ul>
+</li>
+<li><a href="03-analysis.html"><span class="num">Lesson 3</span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="num">Lesson 4</span>Practice</a>
+</li>
+</ul>
+  <div class="side-foot">
+    Built for R <code>4.6.1</code><br>and RStudio <code>2026.08.0</code>
+  </div>
+</aside>
+<main>
+  <div class="wrap">
+    <div class="topbar">
+      <button id="themeBtn" class="iconbtn" type="button" aria-label="Light or dark">☾</button>
+    </div>
+    <span class="chaplabel">Lesson 2</span>
+    <h1>Lesson 2 — Working with data</h1>
+    <p class="readtime">About 7 minutes</p>
+    <article class="content">
+
+<p>In this lesson: open a dataset, look at it properly, build a small
+one yourself, and pull out the rows and columns you need.</p>
+<p>Start a new script called <code>lesson02.R</code>.</p>
+<hr />
+<h2 id="1-a-dataset-to-practise-on">1. A dataset to practise on</h2>
+<p>R comes with practice datasets already built in, so nothing to
+download. We will use one called <strong><code>attitude</code></strong>:
+a survey of employees in 30 departments of a large company. Each
+department has a score from 0 to 100 on seven questions.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rating</code></td>
+<td>Overall rating of the department</td>
+</tr>
+<tr class="even">
+<td><code>complaints</code></td>
+<td>How well complaints are handled</td>
+</tr>
+<tr class="odd">
+<td><code>privileges</code></td>
+<td>Does not allow special privileges</td>
+</tr>
+<tr class="even">
+<td><code>learning</code></td>
+<td>Opportunity to learn</td>
+</tr>
+<tr class="odd">
+<td><code>raises</code></td>
+<td>Raises are based on performance</td>
+</tr>
+<tr class="even">
+<td><code>critical</code></td>
+<td>Too critical</td>
+</tr>
+<tr class="odd">
+<td><code>advance</code></td>
+<td>Chances for advancement</td>
+</tr>
+</tbody>
+</table>
+<p>Type <code>?attitude</code> any time to read more about it.</p>
+<hr />
+<h2 id="2-looking-at-your-data">2. Looking at your data</h2>
+<p>Never analyse a dataset you have not looked at. These five commands
+are all you need:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">View</span>(attitude)      <span class="co"># opens it like a spreadsheet (capital V!)</span></span>
+<span><span class="fu">str</span>(attitude)       <span class="co"># structure: how many cases, what type each variable is</span></span>
+<span><span class="fu">head</span>(attitude)      <span class="co"># the first 6 rows</span></span>
+<span><span class="fu">dim</span>(attitude)       <span class="co"># how many rows and columns</span></span>
+<span><span class="fu">summary</span>(attitude)   <span class="co"># lowest, highest, and average of every variable</span></span></code></pre></div>
+<details>
+<summary><b>Show what <code>str(attitude)</code> gives you</b></summary>
+
+<br>
+
+<pre><code>&#39;data.frame&#39;:   30 obs. of  7 variables:
+ $ rating    : num  43 63 71 61 81 43 58 71 72 67 ...
+ $ complaints: num  51 64 70 63 78 55 67 75 82 61 ...
+ $ privileges: num  30 51 68 45 56 49 42 50 72 45 ...
+ $ learning  : num  39 54 69 47 66 44 56 55 67 47 ...
+ $ raises    : num  61 63 76 54 71 54 66 70 71 62 ...
+ $ critical  : num  92 73 86 84 83 49 68 66 83 80 ...
+ $ advance   : num  45 47 48 35 47 34 35 41 31 41 ...</code></pre>
+<p>Read it as: 30 cases, 7 variables, and every variable is a number
+(<code>num</code>).</p>
+<p><strong><code>str()</code> is the most useful command in R.</strong>
+Run it on every dataset before you do anything else. It tells you
+whether R understood your variables as numbers (<code>num</code>), words
+(<code>chr</code>), or categories (<code>Factor</code>) — and if R got
+that wrong, nothing else will work.</p>
+</details>
+
+<hr />
+<h2 id="3-getting-one-variable-the--sign">3. Getting one variable: the
+<code>$</code> sign</h2>
+<p>A dataset is a table. To grab a single column, put a <code>$</code>
+between the dataset and the variable name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>attitude<span class="sc">$</span>rating          <span class="co"># the whole rating column</span></span>
+<span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)    <span class="co"># the average rating</span></span></code></pre></div>
+<p>Type <code>attitude$</code> and pause — RStudio pops up a list of the
+variable names. Press <strong>Tab</strong> to fill one in. Use this
+every time; it saves you from typos.</p>
+<hr />
+<h2 id="4-opening-your-own-data-file">4. Opening your own data file</h2>
+<p>When you have your own data, save it from Excel as a
+<strong>.csv</strong> file, put it in your <code>PSYC531</code> folder,
+then tell R where to look:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. tell R which folder to work in (yours will look different)</span></span>
+<span><span class="fu">setwd</span>(<span class="st">&quot;C:/Users/yourname/Desktop/PSYC531&quot;</span>)     <span class="co"># Windows</span></span>
+<span><span class="fu">setwd</span>(<span class="st">&quot;/Users/yourname/Desktop/PSYC531&quot;</span>)       <span class="co"># Mac</span></span>
+<span></span>
+<span><span class="co"># 2. check it worked</span></span>
+<span><span class="fu">getwd</span>()</span>
+<span><span class="fu">list.files</span>()      <span class="co"># shows the files R can see — is your file listed?</span></span>
+<span></span>
+<span><span class="co"># 3. open the file</span></span>
+<span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;myfile.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span></span>
+<span><span class="co"># 4. always look at what arrived</span></span>
+<span><span class="fu">str</span>(mydata)</span>
+<span><span class="fu">head</span>(mydata)</span></code></pre></div>
+<p>Two rules that catch everyone:</p>
+<ul>
+<li>Use <strong>forward slashes</strong> <code>/</code> in the path,
+even on Windows.</li>
+<li>Give the path to the <strong>folder</strong>, not to the file.</li>
+</ul>
+<details>
+<summary><b>How to find your folder path</b></summary>
+
+<br>
+
+<p><strong>Easiest way:</strong> in RStudio's <strong>Files</strong>
+panel (bottom right), click through to your folder, then choose
+<strong>More → Copy Folder Path to Clipboard</strong>. Paste it between
+the quote marks.</p>
+<p><strong>Windows:</strong> open File Explorer, click the address bar,
+copy the path, then change every <code>\</code> to <code>/</code>.</p>
+<p><strong>Mac:</strong> in Finder, right-click the folder, hold down
+<strong>Option</strong>, and choose <em>Copy … as Pathname</em>.</p>
+</details>
+
+<details>
+<summary><b>Common problems opening a file</b></summary>
+
+<br>
+
+<table>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cannot open file … No such file or directory</code></td>
+<td>R is looking in the wrong folder, or the name is misspelled</td>
+<td>Run <code>getwd()</code> and <code>list.files()</code></td>
+</tr>
+<tr class="even">
+<td>Columns are named <code>X1</code>, <code>X2</code>…</td>
+<td>Your first row was data, not variable names</td>
+<td>Add a header row in Excel and re-save</td>
+</tr>
+<tr class="odd">
+<td>A number column shows as <code>chr</code></td>
+<td>Something non-numeric is in it (a note, "N/A", a stray comma)</td>
+<td>Fix it in Excel and re-open</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+<p><strong>Saving data back out:</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">write.csv</span>(mydata, <span class="st">&quot;mydata_clean.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>It appears in your folder. Keep <code>row.names = FALSE</code> or you
+get an extra junk column.</p>
+<hr />
+<h2 id="5-typing-in-a-small-dataset-yourself">5. Typing in a small
+dataset yourself</h2>
+<p>For small studies you can type the data straight into R. The key tool
+is <code>c()</code>, which means "combine these values into a list":</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ID <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)                                <span class="co"># the numbers 1 through 10</span></span>
+<span>ExerciseHours <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span>
+<span>SBP <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">148</span>, <span class="dv">145</span>, <span class="dv">142</span>, <span class="dv">140</span>, <span class="dv">137</span>, <span class="dv">135</span>, <span class="dv">132</span>, <span class="dv">130</span>, <span class="dv">128</span>)   <span class="co"># blood pressure</span></span>
+<span></span>
+<span>Name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Mike&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Tina&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Herbert&quot;</span>, <span class="dv">2</span>),</span>
+<span>          <span class="fu">rep</span>(<span class="st">&quot;Yale&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;YOURNAME&quot;</span>, <span class="dv">2</span>))     <span class="co"># rep = repeat</span></span></code></pre></div>
+<p>Text goes in quotes; numbers do not. Now glue the columns into a
+dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> ID,</span>
+<span>                           <span class="at">Name =</span> Name,</span>
+<span>                           <span class="at">ExerciseHours =</span> ExerciseHours,</span>
+<span>                           <span class="at">SBP =</span> SBP)</span>
+<span>ExerciseData</span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>   ID     Name ExerciseHours SBP
+1   1     Mike             0 150
+2   2     Mike             1 148
+3   3     Tina             2 145
+4   4     Tina             3 142
+5   5  Herbert             4 140
+6   6  Herbert             5 137
+7   7     Yale             6 135
+8   8     Yale             7 132
+9   9 YOURNAME             8 130
+10 10 YOURNAME             9 128</code></pre>
+<p>Every column must have the same number of values. If one has 9 and
+the rest have 10, R stops with
+<code>arguments imply differing number of rows</code>.</p>
+</details>
+
+<hr />
+<h2 id="6-picking-out-rows-and-columns">6. Picking out rows and
+columns</h2>
+<p>Square brackets take two things separated by a comma:
+<strong><code>[rows, columns]</code></strong>. Rows first, columns
+second.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData[<span class="dv">1</span>, ]      <span class="co"># row 1, all columns</span></span>
+<span>ExerciseData[, <span class="dv">2</span>]      <span class="co"># all rows, column 2</span></span>
+<span>ExerciseData[<span class="dv">1</span>, <span class="dv">2</span>]     <span class="co"># row 1, column 2 — one cell</span></span>
+<span></span>
+<span>ExerciseData[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]     <span class="co"># columns 2 and 4</span></span>
+<span>ExerciseData[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), ]     <span class="co"># rows 1 and 5</span></span>
+<span></span>
+<span>ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]              <span class="co"># columns by name — safer</span></span>
+<span>ExerciseData[ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;</span> <span class="dv">5</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
+<p>Save any of these under a new name if you want to keep it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>short_version <span class="ot">&lt;-</span> ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]</span>
+<span>short_version</span></code></pre></div>
+<div class="callout callout-tip">
+<p class="callout-label">Tip</p>
+
+<p>Picking columns by <strong>name</strong> is safer than by number. If
+someone adds a column to the file, the numbers all shift and your code
+quietly analyses the wrong variable.</p>
+</div>
+
+<hr />
+<h2 id="7-adding-a-new-variable">7. Adding a new variable</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># a calculated variable</span></span>
+<span>ExerciseData<span class="sc">$</span>SBP_change <span class="ot">&lt;-</span> ExerciseData<span class="sc">$</span>SBP <span class="sc">-</span> <span class="dv">150</span></span>
+<span></span>
+<span><span class="co"># a grouping variable: &quot;active&quot; if 5+ hours, otherwise &quot;less active&quot;</span></span>
+<span>ExerciseData<span class="sc">$</span>Group <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;=</span> <span class="dv">5</span>, <span class="st">&quot;active&quot;</span>, <span class="st">&quot;less active&quot;</span>)</span>
+<span></span>
+<span><span class="fu">table</span>(ExerciseData<span class="sc">$</span>Group)   <span class="co"># how many in each group</span></span></code></pre></div>
+<p><code>ifelse()</code> reads as: <em>if this is true, use the first
+answer, otherwise use the second.</em></p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Q1. Write the code to see the last 4 rows of <code>attitude</code>.</b></summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">tail</span>(attitude, <span class="dv">4</span>)</span></code></pre></div>
+</details>
+
+<details>
+<summary><b>Q2. What is the difference between <code>attitude[3, ]</code> and <code>attitude[, 3]</code>?</b></summary>
+
+<br>
+
+<p><code>attitude[3, ]</code> is the third <strong>row</strong> — one
+department, all seven variables. <code>attitude[, 3]</code> is the third
+<strong>column</strong> — the <code>privileges</code> scores for all 30
+departments.</p>
+<p>The comma placement is the whole difference. Rows first, columns
+second.</p>
+</details>
+
+<details>
+<summary><b>Q3. You open your file and <code>str()</code> shows <code>$ age : chr "23" "31" "twenty"</code>. What happened?</b></summary>
+
+<br>
+
+<p>Someone typed a word into the age column, so R decided the whole
+column was text (<code>chr</code>). Nothing numeric will work on it —
+<code>mean(mydata$age)</code> will fail — until you fix that value in
+the original file and open it again.</p>
+<p>This is exactly why you run <code>str()</code> first.</p>
+</details>
+
+    </article>
+    <nav class="pager">
+<a class="prev" href="01-r-basics.html"><span class="dir">← Previous</span><span class="ttl">R basics</span></a>
+<a class="next" href="03-analysis.html"><span class="dir">Next →</span><span class="ttl">Statistics in R</span></a>
+</nav>
+    <p class="pagefoot">PSYC531 · Course materials on <a href="https://github.com/heren-quant/PSYC531">GitHub</a></p>
+  </div>
+</main>
+<script>
+(function(){
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+             set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+  // theme
+  var root=document.documentElement;
+  var saved=store.get('psyc531-theme');
+  if(saved){root.setAttribute('data-theme',saved);}
+  else if(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches){root.setAttribute('data-theme','dark');}
+  var tb=document.getElementById('themeBtn');
+  function paintTheme(){tb.textContent=root.getAttribute('data-theme')==='dark'?'☀':'☾';}
+  paintTheme();
+  tb.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);store.set('psyc531-theme',next);paintTheme();
+  });
+
+  // mobile nav
+  var mb=document.getElementById('menuBtn'),bd=document.querySelector('.backdrop');
+  function closeNav(){document.body.classList.remove('nav-open');}
+  mb.addEventListener('click',function(){document.body.classList.toggle('nav-open');});
+  bd.addEventListener('click',closeNav);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav();});
+
+  // copy buttons
+  document.querySelectorAll('pre').forEach(function(pre){
+    var wrap=document.createElement('div');wrap.className='codewrap';
+    pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
+    var b=document.createElement('button');b.className='copybtn';b.type='button';b.textContent='Copy';
+    b.addEventListener('click',function(){
+      var txt=pre.innerText;
+      var done=function(){b.textContent='Copied';b.classList.add('done');
+        setTimeout(function(){b.textContent='Copy';b.classList.remove('done')},1400);};
+      if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,done);}
+      else{var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);
+           t.select();try{document.execCommand('copy')}catch(e){}t.remove();done();}
+    });
+    wrap.appendChild(b);
+  });
+
+  // checklists remember themselves
+  document.querySelectorAll('ul.task-list li').forEach(function(li,i){
+    var box=li.querySelector('input[type=checkbox]');if(!box)return;
+    box.disabled=false;
+    var key='psyc531-'+document.body.dataset.page+'-check-'+i;
+    if(store.get(key)==='1'){box.checked=true;li.classList.add('done');}
+    box.addEventListener('change',function(){
+      li.classList.toggle('done',box.checked);store.set(key,box.checked?'1':'0');
+    });
+  });
+
+  // highlight the section you are reading
+  var links=[].slice.call(document.querySelectorAll('.subtoc a'));
+  if(links.length){
+    var heads=links.map(function(a){return document.getElementById(a.hash.slice(1));});
+    var mark=function(){
+      var y=window.scrollY+120,cur=0;
+      heads.forEach(function(h,i){if(h&&h.offsetTop<=y)cur=i;});
+      links.forEach(function(a,i){a.classList.toggle('here',i===cur);});
+    };
+    mark();window.addEventListener('scroll',mark,{passive:true});
+  }
+})();
+</script>
+</body>
+</html>

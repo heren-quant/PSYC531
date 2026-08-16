@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>R basics · PSYC531 Introduction to R</title>
+<meta name="description" content="PSYC531 introduction to R and RStudio for social science students.">
+<style>
+:root{
+  --bg:#ffffff; --bg-soft:#f6f8fb; --bg-side:#fbfcfe;
+  --text:#1e2430; --muted:#5f6a7a; --border:#e4e9f0;
+  --accent:#1f6bb8; --accent-soft:#e8f1fb;
+  --code-bg:#f6f8fa; --code-text:#242c39;
+  --c-comment:#6a8759; --c-string:#22863a; --c-num:#8250df;
+  --c-fun:#1f6bb8; --c-op:#b3457a; --c-kw:#cf222e;
+  --shadow:0 1px 2px rgba(20,30,50,.05),0 8px 24px rgba(20,30,50,.06);
+}
+html[data-theme="dark"]{
+  --bg:#0f141c; --bg-soft:#161d28; --bg-side:#121824;
+  --text:#dde3ec; --muted:#94a0b1; --border:#252e3d;
+  --accent:#69a7f0; --accent-soft:#16233a;
+  --code-bg:#161d28; --code-text:#dde3ec;
+  --c-comment:#8b9c74; --c-string:#7ee787; --c-num:#d2a8ff;
+  --c-fun:#79c0ff; --c-op:#ff9bce; --c-kw:#ff7b72;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size:17px; line-height:1.72; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---------- sidebar ---------- */
+.sidebar{
+  position:fixed; top:0; left:0; width:300px; height:100vh; overflow-y:auto;
+  background:var(--bg-side); border-right:1px solid var(--border); padding:26px 20px 40px;
+  z-index:40;
+}
+.brand{display:block;margin-bottom:22px}
+.brand .course{font-size:1.12rem;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.brand .sub{display:block;font-size:.83rem;color:var(--muted);margin-top:2px}
+.brand:hover{text-decoration:none}
+.toc{list-style:none;margin:0;padding:0}
+.toc>li{margin-bottom:2px}
+.toc>li>a{
+  display:block;padding:8px 12px;border-radius:8px;color:var(--text);
+  font-size:.93rem;line-height:1.4;border-left:3px solid transparent;
+}
+.toc>li>a:hover{background:var(--bg-soft);text-decoration:none}
+.toc .num{display:block;font-size:.71rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600}
+.toc>li.active>a{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+.toc>li.active .num{color:var(--accent)}
+.subtoc{list-style:none;margin:4px 0 10px;padding:0 0 0 15px;border-left:1px solid var(--border)}
+.subtoc a{display:block;padding:4px 10px;font-size:.845rem;color:var(--muted);border-radius:6px}
+.subtoc a:hover{color:var(--text);background:var(--bg-soft);text-decoration:none}
+.subtoc a.here{color:var(--accent);font-weight:600}
+.side-foot{margin-top:26px;padding-top:16px;border-top:1px solid var(--border);font-size:.78rem;color:var(--muted)}
+.side-foot code{font-size:.78rem}
+
+/* ---------- layout ---------- */
+main{margin-left:300px;padding:0 40px 80px}
+.wrap{max-width:47rem;margin:0 auto}
+.topbar{display:flex;align-items:center;gap:10px;justify-content:flex-end;padding:14px 0 0}
+.iconbtn{
+  background:var(--bg-soft);border:1px solid var(--border);color:var(--muted);
+  width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:15px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.iconbtn:hover{color:var(--text);border-color:var(--accent)}
+#menuBtn{display:none;position:fixed;top:12px;left:12px;z-index:50;background:var(--bg);box-shadow:var(--shadow)}
+
+.chaplabel{
+  display:inline-block;margin:34px 0 6px;padding:4px 11px;border-radius:99px;
+  background:var(--accent-soft);color:var(--accent);
+  font-size:.74rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+}
+h1{font-size:2.2rem;line-height:1.2;letter-spacing:-.022em;margin:.1em 0 .35em}
+.readtime{color:var(--muted);font-size:.87rem;margin:0 0 30px}
+h2{font-size:1.42rem;letter-spacing:-.014em;margin:2.4em 0 .7em;padding-top:.5em;border-top:1px solid var(--border)}
+h3{font-size:1.11rem;margin:1.9em 0 .5em}
+p,ul,ol,table,pre{margin:0 0 1.15em}
+ul,ol{padding-left:1.35em}
+li{margin-bottom:.4em}
+hr{display:none}  /* section rules come from the h2 border instead */
+strong{font-weight:650}
+blockquote{margin:0 0 1.15em;padding:.3em 0 .3em 1.1em;border-left:3px solid var(--border);color:var(--muted)}
+
+/* ---------- code ---------- */
+code{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;font-size:.86em}
+p code,li code,td code,h2 code,h3 code,summary code{
+  background:var(--bg-soft);border:1px solid var(--border);
+  padding:.1em .38em;border-radius:5px;white-space:nowrap;
+}
+div.sourceCode,pre:not(.sourceCode *){position:relative}
+pre{
+  background:var(--code-bg);color:var(--code-text);border:1px solid var(--border);
+  border-radius:10px;padding:15px 17px;overflow-x:auto;font-size:.9rem;line-height:1.62;
+}
+pre code{background:none;border:none;padding:0;font-size:inherit;white-space:pre}
+.sourceCode .co{color:var(--c-comment);font-style:italic}
+.sourceCode .st{color:var(--c-string)}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:var(--c-num)}
+.sourceCode .fu{color:var(--c-fun)}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:var(--c-op)}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:var(--c-kw)}
+.codewrap{position:relative;margin:0 0 1.15em}
+.codewrap pre{margin:0}
+.copybtn{
+  position:absolute;top:8px;right:8px;padding:4px 9px;font-size:.73rem;font-weight:600;
+  color:var(--muted);background:var(--bg);border:1px solid var(--border);border-radius:7px;
+  cursor:pointer;opacity:0;transition:opacity .15s;
+}
+.codewrap:hover .copybtn,.copybtn:focus{opacity:1}
+.copybtn:hover{color:var(--accent);border-color:var(--accent)}
+.copybtn.done{color:#1a7f37;border-color:#1a7f37}
+
+/* ---------- tables ---------- */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--bg-soft);font-weight:650}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--bg-soft) 55%,transparent)}
+
+/* ---------- callouts ---------- */
+.callout{
+  border:1px solid var(--border);border-left:4px solid var(--accent);
+  background:var(--bg-soft);border-radius:9px;padding:14px 18px 2px;margin:0 0 1.3em;
+}
+.callout>*:last-child{margin-bottom:14px}
+.callout-label{
+  font-size:.74rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  margin:0 0 .5em;color:var(--accent);
+}
+.callout-note{border-left-color:#3b82f6}.callout-note .callout-label{color:#3b82f6}
+.callout-tip{border-left-color:#16a34a}.callout-tip .callout-label{color:#16a34a}
+.callout-important{border-left-color:#7c3aed}.callout-important .callout-label{color:#7c3aed}
+.callout-warning{border-left-color:#d97706}.callout-warning .callout-label{color:#d97706}
+.callout-caution{border-left-color:#dc2626}.callout-caution .callout-label{color:#dc2626}
+
+/* ---------- details ---------- */
+details{
+  border:1px solid var(--border);border-radius:10px;background:var(--bg-soft);
+  margin:0 0 1.3em;overflow:hidden;
+}
+details[open]{background:var(--bg);box-shadow:var(--shadow)}
+summary{
+  cursor:pointer;padding:12px 16px 12px 38px;font-weight:600;font-size:.96rem;
+  list-style:none;position:relative;color:var(--accent);
+}
+summary::-webkit-details-marker{display:none}
+summary::before{
+  content:"";position:absolute;left:16px;top:50%;width:6px;height:6px;
+  border-right:2px solid currentColor;border-bottom:2px solid currentColor;
+  transform:translateY(-70%) rotate(-45deg);transition:transform .18s;
+}
+details[open]>summary::before{transform:translateY(-50%) rotate(45deg)}
+summary:hover{background:var(--accent-soft)}
+details>*:not(summary){padding-left:16px;padding-right:16px}
+details>*:last-child{margin-bottom:14px}
+details br:first-of-type{display:none}
+details b{font-weight:650}
+
+/* ---------- task list ---------- */
+ul.task-list{list-style:none;padding-left:.1em}
+ul.task-list li{margin-bottom:.6em}
+ul.task-list label{display:flex;align-items:flex-start;gap:.7em;cursor:pointer}
+ul.task-list input[type=checkbox]{
+  width:1.1em;height:1.1em;margin:.33em 0 0;accent-color:var(--accent);cursor:pointer;flex:none;
+}
+ul.task-list li.done{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--border)}
+
+/* ---------- pager ---------- */
+.pager{display:flex;gap:14px;margin:56px 0 0;padding-top:26px;border-top:1px solid var(--border)}
+.pager a{
+  flex:1;border:1px solid var(--border);border-radius:11px;padding:14px 17px;
+  background:var(--bg-soft);color:var(--text);
+}
+.pager a:hover{border-color:var(--accent);background:var(--accent-soft);text-decoration:none}
+.pager .dir{display:block;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:3px}
+.pager .ttl{font-weight:650;font-size:.97rem}
+.pager .next{text-align:right}
+.pager .ghost{visibility:hidden}
+.pagefoot{margin-top:34px;color:var(--muted);font-size:.82rem;text-align:center}
+
+.backdrop{display:none;position:fixed;inset:0;background:rgba(10,15,25,.42);z-index:35}
+
+@media(max-width:980px){
+  body{font-size:16.5px}
+  .sidebar{transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  body.nav-open .sidebar{transform:none}
+  body.nav-open .backdrop{display:block}
+  main{margin-left:0;padding:0 20px 70px}
+  #menuBtn{display:inline-flex}
+  .topbar{padding-top:12px}
+  h1{font-size:1.8rem}
+  .pager{flex-direction:column}
+}
+@media print{
+  .sidebar,.pager,.topbar,#menuBtn,.copybtn{display:none}
+  main{margin:0}
+  details{border:none} details>*:not(summary){padding:0}
+  details:not([open])>*:not(summary){display:block}
+}
+</style>
+</head>
+<body data-page="01-r-basics.html">
+<button id="menuBtn" class="iconbtn" type="button" aria-label="Menu">☰</button>
+<div class="backdrop"></div>
+<aside class="sidebar">
+  <a class="brand" href="index.html">
+    <span class="course">PSYC531</span>
+    <span class="sub">Introduction to R</span>
+  </a>
+  <ul class="toc">
+<li><a href="index.html"><span class="num">Start here</span>Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="num">Lesson 0</span>Install R and RStudio</a>
+</li>
+<li class="active"><a href="01-r-basics.html"><span class="num">Lesson 1</span>R basics</a>
+<ul class="subtoc">
+<li><a href="#1-running-code">1. Running code</a></li>
+<li><a href="#2-r-as-a-calculator">2. R as a calculator</a></li>
+<li><a href="#3-saving-a-result-the---arrow">3. Saving a result: the
+&amp;lt;- arrow</a></li>
+<li><a href="#4-notes-to-yourself-the--symbol">4. Notes to yourself: the
+# symbol</a></li>
+<li><a href="#5-add-on-packages">5. Add-on packages</a></li>
+<li><a href="#6-two-housekeeping-habits">6. Two housekeeping habits</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ul>
+</li>
+<li><a href="02-data.html"><span class="num">Lesson 2</span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="num">Lesson 3</span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="num">Lesson 4</span>Practice</a>
+</li>
+</ul>
+  <div class="side-foot">
+    Built for R <code>4.6.1</code><br>and RStudio <code>2026.08.0</code>
+  </div>
+</aside>
+<main>
+  <div class="wrap">
+    <div class="topbar">
+      <button id="themeBtn" class="iconbtn" type="button" aria-label="Light or dark">☾</button>
+    </div>
+    <span class="chaplabel">Lesson 1</span>
+    <h1>Lesson 1 — R basics</h1>
+    <p class="readtime">About 5 minutes</p>
+    <article class="content">
+
+<p>In this lesson: run code, do arithmetic, save results under a name,
+and add notes to yourself.</p>
+<p>Open RStudio, click <strong>File → New File → R Script</strong>, and
+save it in your <code>PSYC531</code> folder as <code>lesson01.R</code>.
+Type along as you read.</p>
+<hr />
+<h2 id="1-running-code">1. Running code</h2>
+<p>Code you type in the script panel does nothing until you
+<strong>run</strong> it. Two ways:</p>
+<ul>
+<li>Highlight the code and click the <strong>Run</strong> button at the
+top of the panel, or</li>
+<li>Highlight it and press <strong>Ctrl + Enter</strong> (Windows) /
+<strong>Cmd + Return</strong> (Mac)</li>
+</ul>
+<p>The code and its answer appear in the console below.</p>
+<div class="callout callout-tip">
+<p class="callout-label">Tip</p>
+
+<p>If the console shows a <code>+</code> instead of a <code>&gt;</code>,
+R thinks you left a sentence unfinished — usually a missing
+<code>)</code> or <code>"</code>. Click in the console and press
+<strong>Esc</strong>, then fix the line.</p>
+</div>
+
+<hr />
+<h2 id="2-r-as-a-calculator">2. R as a calculator</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span>        <span class="co"># add</span></span>
+<span><span class="dv">3</span> <span class="sc">-</span> <span class="dv">2</span>        <span class="co"># subtract</span></span>
+<span><span class="dv">3</span> <span class="sc">*</span> <span class="dv">2</span>        <span class="co"># multiply</span></span>
+<span><span class="dv">3</span> <span class="sc">/</span> <span class="dv">2</span>        <span class="co"># divide</span></span>
+<span><span class="dv">3</span><span class="sc">^</span><span class="dv">2</span>          <span class="co"># 3 squared</span></span>
+<span><span class="fu">sqrt</span>(<span class="dv">9</span>)      <span class="co"># square root</span></span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>[1] 5
+[1] 1
+[1] 6
+[1] 1.5
+[1] 9
+[1] 3</code></pre>
+<p>Ignore the <code>[1]</code> — it is R numbering the answers, not part
+of the result.</p>
+</details>
+
+<p>Words like <code>sqrt</code> are <strong>functions</strong>. A
+function is an instruction with its ingredients in brackets:
+<code>sqrt(9)</code> means "take the square root of 9". You will use
+dozens of them, and they all follow that shape.</p>
+<hr />
+<h2 id="3-saving-a-result-the---arrow">3. Saving a result: the
+<code>&lt;-</code> arrow</h2>
+<p>If you just type <code>3 + 2</code>, R answers and forgets. To keep
+something, give it a name using the arrow <code>&lt;-</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>mynum <span class="ot">&lt;-</span> <span class="dv">2931</span>    <span class="co"># store 2931 under the name mynum</span></span>
+<span>mynum            <span class="co"># show me what mynum is</span></span>
+<span>mynum <span class="sc">+</span> <span class="dv">1</span>        <span class="co"># use it in a calculation</span></span></code></pre></div>
+<p>Look at the <strong>Environment</strong> panel (top right) —
+<code>mynum</code> appeared there. That panel is a list of everything R
+currently knows about.</p>
+<p><strong>Shortcut for the arrow:</strong> <strong>Alt + −</strong>
+(Windows) or <strong>Option + −</strong> (Mac).</p>
+<p>Try it with your own name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>allen <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span>allen</span></code></pre></div>
+<h3 id="naming-rules">Naming rules</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>Good</th>
+<th>Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start with a letter</td>
+<td><code>score1</code></td>
+<td><code>1score</code></td>
+</tr>
+<tr class="even">
+<td>No spaces — use <code>_</code></td>
+<td><code>reaction_time</code></td>
+<td><code>reaction time</code></td>
+</tr>
+<tr class="odd">
+<td>Capitals matter</td>
+<td><code>myData</code> is not <code>mydata</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<p class="callout-label">Note</p>
+
+<p>You will also see <code>=</code> used instead of <code>&lt;-</code>.
+Both work. This course uses <code>&lt;-</code> because it makes it
+obvious you are storing something.</p>
+</div>
+
+<hr />
+<h2 id="4-notes-to-yourself-the--symbol">4. Notes to yourself: the
+<code>#</code> symbol</h2>
+<p>Anything after a <code>#</code> is ignored by R. Use it constantly to
+explain what your code does — for your instructor, your group, and
+yourself next month.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># This whole line is a note</span></span>
+<span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span>   <span class="co"># this part is a note too</span></span></code></pre></div>
+<p><strong>Shortcut:</strong> highlight some lines and press
+<strong>Ctrl + Shift + C</strong> (Windows) / <strong>Cmd + Shift +
+C</strong> (Mac) to turn them into notes, or turn them back.</p>
+<p><strong>Handy trick:</strong> end a note with four dashes and RStudio
+turns it into a heading you can collapse and jump to:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. Load the data ----</span></span>
+<span><span class="co"># 2. Descriptive statistics ----</span></span>
+<span><span class="co"># 3. Analyses ----</span></span></code></pre></div>
+<p>Once your homework script is 100 lines long, you will be glad you did
+this.</p>
+<hr />
+<h2 id="5-add-on-packages">5. Add-on packages</h2>
+<p>Base R covers the basics. Packages add more. Install once, load every
+session.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># Run this ONCE (needs internet):</span></span>
+<span><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;car&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;psych&quot;</span>))</span>
+<span></span>
+<span><span class="co"># Run this EVERY TIME you open R:</span></span>
+<span><span class="fu">library</span>(car)</span>
+<span><span class="fu">library</span>(ggplot2)</span>
+<span><span class="fu">library</span>(psych)</span></code></pre></div>
+<p>Notice the quotes: <strong>in quotes to install, no quotes to
+load.</strong></p>
+<p>After the first time, put a <code>#</code> in front of the
+<code>install.packages</code> line so you do not download them
+again.</p>
+<details>
+<summary><b>What are these three packages for?</b></summary>
+
+<br>
+
+<table>
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>What it gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>car</code></td>
+<td>Tools for checking regression assumptions</td>
+</tr>
+<tr class="even">
+<td><code>ggplot2</code></td>
+<td>Better-looking graphs</td>
+</tr>
+<tr class="odd">
+<td><code>psych</code></td>
+<td>Quick descriptive statistics tables, built for psychologists</td>
+</tr>
+</tbody>
+</table>
+<p>Your instructor may add others as the term goes on.</p>
+</details>
+
+<hr />
+<h2 id="6-two-housekeeping-habits">6. Two housekeeping habits</h2>
+<p><strong>Start clean.</strong> Leftovers from yesterday cause
+confusing results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())   <span class="co"># clears everything out of the Environment panel</span></span></code></pre></div>
+<p>This only clears R's memory. Your files and your script are
+untouched. (The little broom icon in the Environment panel does the same
+thing.)</p>
+<p><strong>Show full numbers.</strong> By default R prints tiny numbers
+as <code>1.98e-08</code>, which is hard to read in a results
+section:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)   <span class="co"># show full numbers instead</span></span></code></pre></div>
+<p>Put both lines at the top of every script you write.</p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Q1. What is the difference between <code>=</code> and <code>==</code>?</b></summary>
+
+<br>
+
+<p>One equals sign stores a value. Two equals signs ask a question and
+answer TRUE or FALSE:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span>x <span class="sc">==</span> <span class="dv">5</span>   <span class="co"># TRUE  — &quot;is x equal to 5?&quot;</span></span>
+<span>x <span class="sc">==</span> <span class="dv">6</span>   <span class="co"># FALSE</span></span></code></pre></div>
+<p>Mixing these up is one of the most common beginner mistakes.</p>
+</details>
+
+<details>
+<summary><b>Q2. You run <code>library(psych)</code> and see "there is no package called 'psych'". Why?</b></summary>
+
+<br>
+
+<p>You tried to open an app you never downloaded. Run
+<code>install.packages("psych")</code> first (with quotes), then
+<code>library(psych)</code> (without quotes).</p>
+</details>
+
+<details>
+<summary><b>Q3. Predict the answer, then test it.</b></summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>a <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span>b <span class="ot">&lt;-</span> a</span>
+<span>a <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span>b</span></code></pre></div>
+<p><code>b</code> is still <strong>10</strong>. Storing copies the value
+at that moment; <code>b</code> does not follow <code>a</code> around
+afterwards.</p>
+</details>
+
+    </article>
+    <nav class="pager">
+<a class="prev" href="00-install.html"><span class="dir">← Previous</span><span class="ttl">Install R and RStudio</span></a>
+<a class="next" href="02-data.html"><span class="dir">Next →</span><span class="ttl">Working with data</span></a>
+</nav>
+    <p class="pagefoot">PSYC531 · Course materials on <a href="https://github.com/heren-quant/PSYC531">GitHub</a></p>
+  </div>
+</main>
+<script>
+(function(){
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+             set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+  // theme
+  var root=document.documentElement;
+  var saved=store.get('psyc531-theme');
+  if(saved){root.setAttribute('data-theme',saved);}
+  else if(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches){root.setAttribute('data-theme','dark');}
+  var tb=document.getElementById('themeBtn');
+  function paintTheme(){tb.textContent=root.getAttribute('data-theme')==='dark'?'☀':'☾';}
+  paintTheme();
+  tb.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);store.set('psyc531-theme',next);paintTheme();
+  });
+
+  // mobile nav
+  var mb=document.getElementById('menuBtn'),bd=document.querySelector('.backdrop');
+  function closeNav(){document.body.classList.remove('nav-open');}
+  mb.addEventListener('click',function(){document.body.classList.toggle('nav-open');});
+  bd.addEventListener('click',closeNav);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav();});
+
+  // copy buttons
+  document.querySelectorAll('pre').forEach(function(pre){
+    var wrap=document.createElement('div');wrap.className='codewrap';
+    pre.parentNode.insertBefore(wrap,pre);wrap.appendChild(pre);
+    var b=document.createElement('button');b.className='copybtn';b.type='button';b.textContent='Copy';
+    b.addEventListener('click',function(){
+      var txt=pre.innerText;
+      var done=function(){b.textContent='Copied';b.classList.add('done');
+        setTimeout(function(){b.textContent='Copy';b.classList.remove('done')},1400);};
+      if(navigator.clipboard){navigator.clipboard.writeText(txt).then(done,done);}
+      else{var t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);
+           t.select();try{document.execCommand('copy')}catch(e){}t.remove();done();}
+    });
+    wrap.appendChild(b);
+  });
+
+  // checklists remember themselves
+  document.querySelectorAll('ul.task-list li').forEach(function(li,i){
+    var box=li.querySelector('input[type=checkbox]');if(!box)return;
+    box.disabled=false;
+    var key='psyc531-'+document.body.dataset.page+'-check-'+i;
+    if(store.get(key)==='1'){box.checked=true;li.classList.add('done');}
+    box.addEventListener('change',function(){
+      li.classList.toggle('done',box.checked);store.set(key,box.checked?'1':'0');
+    });
+  });
+
+  // highlight the section you are reading
+  var links=[].slice.call(document.querySelectorAll('.subtoc a'));
+  if(links.length){
+    var heads=links.map(function(a){return document.getElementById(a.hash.slice(1));});
+    var mark=function(){
+      var y=window.scrollY+120,cur=0;
+      heads.forEach(function(h,i){if(h&&h.offsetTop<=y)cur=i;});
+      links.forEach(function(a,i){a.classList.toggle('here',i===cur);});
+    };
+    mark();window.addEventListener('scroll',mark,{passive:true});
+  }
+})();
+</script>
+</body>
+</html>
