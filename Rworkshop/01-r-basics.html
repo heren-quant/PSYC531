@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>R basics | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+</li>
+<li class="current"><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+<ol class="sub">
+<li><a href="#1-running-code">1. Running code</a></li>
+<li><a href="#2-r-as-a-calculator">2. R as a calculator</a></li>
+<li><a href="#3-saving-a-result-the---arrow">3. Saving a result: the
+&amp;lt;- arrow</a></li>
+<li><a href="#4-notes-to-yourself-the--symbol">4. Notes to yourself: the
+# symbol</a></li>
+<li><a href="#5-add-on-packages">5. Add-on packages</a></li>
+<li><a href="#6-two-housekeeping-habits">6. Two housekeeping habits</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ol>
+</li>
+<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>Lesson 1 — R basics</h1>
+<p>In this lesson: run code, do arithmetic, save results under a name,
+and add notes to yourself.</p>
+<p>Open RStudio, click <strong>File → New File → R Script</strong>, and
+save it in your <code>PSYC531</code> folder as <code>lesson01.R</code>.
+Type along as you read.</p>
+<hr />
+<h2 id="1-running-code">1. Running code</h2>
+<p>Code you type in the script panel does nothing until you
+<strong>run</strong> it. Two ways:</p>
+<ul>
+<li>Highlight the code and click the <strong>Run</strong> button at the
+top of the panel, or</li>
+<li>Highlight it and press <strong>Ctrl + Enter</strong> (Windows) /
+<strong>Cmd + Return</strong> (Mac)</li>
+</ul>
+<p>The code and its answer appear in the console below.</p>
+<div class="note">
+<p class="note-label">Tip</p>
+
+<p>If the console shows a <code>+</code> instead of a <code>&gt;</code>,
+R thinks you left a sentence unfinished — usually a missing
+<code>)</code> or <code>"</code>. Click in the console and press
+<strong>Esc</strong>, then fix the line.</p>
+</div>
+
+<hr />
+<h2 id="2-r-as-a-calculator">2. R as a calculator</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span>        <span class="co"># add</span></span>
+<span><span class="dv">3</span> <span class="sc">-</span> <span class="dv">2</span>        <span class="co"># subtract</span></span>
+<span><span class="dv">3</span> <span class="sc">*</span> <span class="dv">2</span>        <span class="co"># multiply</span></span>
+<span><span class="dv">3</span> <span class="sc">/</span> <span class="dv">2</span>        <span class="co"># divide</span></span>
+<span><span class="dv">3</span><span class="sc">^</span><span class="dv">2</span>          <span class="co"># 3 squared</span></span>
+<span><span class="fu">sqrt</span>(<span class="dv">9</span>)      <span class="co"># square root</span></span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>[1] 5
+[1] 1
+[1] 6
+[1] 1.5
+[1] 9
+[1] 3</code></pre>
+<p>Ignore the <code>[1]</code> — it is R numbering the answers, not part
+of the result.</p>
+</details>
+
+<p>Words like <code>sqrt</code> are <strong>functions</strong>. A
+function is an instruction with its ingredients in brackets:
+<code>sqrt(9)</code> means "take the square root of 9". You will use
+dozens of them, and they all follow that shape.</p>
+<hr />
+<h2 id="3-saving-a-result-the---arrow">3. Saving a result: the
+<code>&lt;-</code> arrow</h2>
+<p>If you just type <code>3 + 2</code>, R answers and forgets. To keep
+something, give it a name using the arrow <code>&lt;-</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>mynum <span class="ot">&lt;-</span> <span class="dv">2931</span>    <span class="co"># store 2931 under the name mynum</span></span>
+<span>mynum            <span class="co"># show me what mynum is</span></span>
+<span>mynum <span class="sc">+</span> <span class="dv">1</span>        <span class="co"># use it in a calculation</span></span></code></pre></div>
+<p>Look at the <strong>Environment</strong> panel (top right) —
+<code>mynum</code> appeared there. That panel is a list of everything R
+currently knows about.</p>
+<p><strong>Shortcut for the arrow:</strong> <strong>Alt + −</strong>
+(Windows) or <strong>Option + −</strong> (Mac).</p>
+<p>Try it with your own name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>allen <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span>allen</span></code></pre></div>
+<h3 id="naming-rules">Naming rules</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Rule</th>
+<th>Good</th>
+<th>Bad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Start with a letter</td>
+<td><code>score1</code></td>
+<td><code>1score</code></td>
+</tr>
+<tr class="even">
+<td>No spaces — use <code>_</code></td>
+<td><code>reaction_time</code></td>
+<td><code>reaction time</code></td>
+</tr>
+<tr class="odd">
+<td>Capitals matter</td>
+<td><code>myData</code> is not <code>mydata</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div class="note">
+<p class="note-label">Note</p>
+
+<p>You will also see <code>=</code> used instead of <code>&lt;-</code>.
+Both work. This course uses <code>&lt;-</code> because it makes it
+obvious you are storing something.</p>
+</div>
+
+<hr />
+<h2 id="4-notes-to-yourself-the--symbol">4. Notes to yourself: the
+<code>#</code> symbol</h2>
+<p>Anything after a <code>#</code> is ignored by R. Use it constantly to
+explain what your code does — for your instructor, your group, and
+yourself next month.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># This whole line is a note</span></span>
+<span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span>   <span class="co"># this part is a note too</span></span></code></pre></div>
+<p><strong>Shortcut:</strong> highlight some lines and press
+<strong>Ctrl + Shift + C</strong> (Windows) / <strong>Cmd + Shift +
+C</strong> (Mac) to turn them into notes, or turn them back.</p>
+<p><strong>Handy trick:</strong> end a note with four dashes and RStudio
+turns it into a heading you can collapse and jump to:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. Load the data ----</span></span>
+<span><span class="co"># 2. Descriptive statistics ----</span></span>
+<span><span class="co"># 3. Analyses ----</span></span></code></pre></div>
+<p>Once your homework script is 100 lines long, you will be glad you did
+this.</p>
+<hr />
+<h2 id="5-add-on-packages">5. Add-on packages</h2>
+<p>Base R covers the basics. Packages add more. Install once, load every
+session.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># Run this ONCE (needs internet):</span></span>
+<span><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;car&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;psych&quot;</span>))</span>
+<span></span>
+<span><span class="co"># Run this EVERY TIME you open R:</span></span>
+<span><span class="fu">library</span>(car)</span>
+<span><span class="fu">library</span>(ggplot2)</span>
+<span><span class="fu">library</span>(psych)</span></code></pre></div>
+<p>Notice the quotes: <strong>in quotes to install, no quotes to
+load.</strong></p>
+<p>After the first time, put a <code>#</code> in front of the
+<code>install.packages</code> line so you do not download them
+again.</p>
+<details>
+<summary><b>What are these three packages for?</b></summary>
+
+<br>
+
+<table>
+<thead>
+<tr class="header">
+<th>Package</th>
+<th>What it gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>car</code></td>
+<td>Tools for checking regression assumptions</td>
+</tr>
+<tr class="even">
+<td><code>ggplot2</code></td>
+<td>Better-looking graphs</td>
+</tr>
+<tr class="odd">
+<td><code>psych</code></td>
+<td>Quick descriptive statistics tables, built for psychologists</td>
+</tr>
+</tbody>
+</table>
+<p>Your instructor may add others as the term goes on.</p>
+</details>
+
+<hr />
+<h2 id="6-two-housekeeping-habits">6. Two housekeeping habits</h2>
+<p><strong>Start clean.</strong> Leftovers from yesterday cause
+confusing results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())   <span class="co"># clears everything out of the Environment panel</span></span></code></pre></div>
+<p>This only clears R's memory. Your files and your script are
+untouched. (The little broom icon in the Environment panel does the same
+thing.)</p>
+<p><strong>Show full numbers.</strong> By default R prints tiny numbers
+as <code>1.98e-08</code>, which is hard to read in a results
+section:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)   <span class="co"># show full numbers instead</span></span></code></pre></div>
+<p>Put both lines at the top of every script you write.</p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Q1. What is the difference between <code>=</code> and <code>==</code>?</b></summary>
+
+<br>
+
+<p>One equals sign stores a value. Two equals signs ask a question and
+answer TRUE or FALSE:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>x <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span>x <span class="sc">==</span> <span class="dv">5</span>   <span class="co"># TRUE  — &quot;is x equal to 5?&quot;</span></span>
+<span>x <span class="sc">==</span> <span class="dv">6</span>   <span class="co"># FALSE</span></span></code></pre></div>
+<p>Mixing these up is one of the most common beginner mistakes.</p>
+</details>
+
+<details>
+<summary><b>Q2. You run <code>library(psych)</code> and see "there is no package called 'psych'". Why?</b></summary>
+
+<br>
+
+<p>You tried to open an app you never downloaded. Run
+<code>install.packages("psych")</code> first (with quotes), then
+<code>library(psych)</code> (without quotes).</p>
+</details>
+
+<details>
+<summary><b>Q3. Predict the answer, then test it.</b></summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>a <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span>b <span class="ot">&lt;-</span> a</span>
+<span>a <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span>b</span></code></pre></div>
+<p><code>b</code> is still <strong>10</strong>. Storing copies the value
+at that moment; <code>b</code> does not follow <code>a</code> around
+afterwards.</p>
+</details>
+    <div class="pager">
+<a class="prev" href="00-install.html">← Install R and RStudio</a>
+<a class="next" href="02-data.html">Working with data →</a>
+</div>
+  </div>
+</div>
+</body>
+</html>

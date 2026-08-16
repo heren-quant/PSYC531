@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+</li>
+<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+</li>
+<li class="current"><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+<ol class="sub">
+<li><a href="#part-a--warm-up">Part A — Warm-up</a></li>
+<li><a href="#part-b--making-data">Part B — Making data</a></li>
+<li><a href="#part-c--describing-a-real-dataset">Part C — Describing a real
+dataset</a></li>
+<li><a href="#part-d--relationships">Part D — Relationships</a></li>
+<li><a href="#a-script-template">A script template</a></li>
+<li><a href="#when-something-goes-wrong">When something goes wrong</a></li>
+<li><a href="#want-more-practice">Want more practice?</a></li>
+</ol>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>Lesson 4 — Practice</h1>
+<p>Twelve exercises. Open a new script called <code>lesson04.R</code>
+and write your answer before you open the solution. Getting an error and
+fixing it is where the learning actually happens.</p>
+<div class="note">
+<p class="note-label">Tip</p>
+
+<p>Stuck for more than five minutes? Look at the <a
+href="#when-something-goes-wrong">error table</a> at the bottom, type
+<code>?functionname</code> in R, or search the exact error message
+online. All three are normal.</p>
+</div>
+
+<hr />
+<h2 id="part-a--warm-up">Part A — Warm-up</h2>
+<p><strong>A1.</strong> Use R to work out 17 × 23, then the square root
+of 144.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="dv">17</span> <span class="sc">*</span> <span class="dv">23</span>      <span class="co"># 391</span></span>
+<span><span class="fu">sqrt</span>(<span class="dv">144</span>)    <span class="co"># 12</span></span></code></pre></div>
+</details>
+
+<p><strong>A2.</strong> Store your age under the name
+<code>my_age</code>, then create <code>age_in_months</code> from it —
+without typing your age a second time.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>my_age <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span>age_in_months <span class="ot">&lt;-</span> my_age <span class="sc">*</span> <span class="dv">12</span></span>
+<span>age_in_months</span></code></pre></div>
+<p>The point is that the second line is built from the first. If you
+retype the number, you now have two places to update when it changes —
+which is how mistakes get into real analyses.</p>
+</details>
+
+<p><strong>A3.</strong> Each of these lines has one mistake. Find and
+fix them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>my num <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span><span class="fu">Mean</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>))</span></code></pre></div>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>my_num <span class="ot">&lt;-</span> <span class="dv">5</span>          <span class="co"># names cannot contain a space</span></span>
+<span><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>))     <span class="co"># R is case-sensitive: mean, not Mean</span></span></code></pre></div>
+</details>
+
+<hr />
+<h2 id="part-b--making-data">Part B — Making data</h2>
+<p><strong>B1.</strong> Create a list called <code>scores</code>
+containing 12, 15, 9, 22, 18, 7, 14. Then find how many values it has,
+its mean, and its standard deviation.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>scores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">15</span>, <span class="dv">9</span>, <span class="dv">22</span>, <span class="dv">18</span>, <span class="dv">7</span>, <span class="dv">14</span>)</span>
+<span><span class="fu">length</span>(scores)   <span class="co"># 7</span></span>
+<span><span class="fu">mean</span>(scores)     <span class="co"># 13.85714</span></span>
+<span><span class="fu">sd</span>(scores)       <span class="co"># 5.145513</span></span></code></pre></div>
+</details>
+
+<p><strong>B2.</strong> In one line, make a list that says
+<code>"control"</code> five times and then <code>"treatment"</code> five
+times.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>condition <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;control&quot;</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="st">&quot;treatment&quot;</span>, <span class="dv">5</span>))</span>
+<span>condition</span></code></pre></div>
+</details>
+
+<p><strong>B3.</strong> Build a dataset called <code>study1</code> with
+10 participants: an <code>ID</code> numbered 1 to 10, the
+<code>condition</code> list from B2, and a <code>score</code> for each
+person. Then check it with <code>str()</code>.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>study1 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>),</span>
+<span>                     <span class="at">condition =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;control&quot;</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="st">&quot;treatment&quot;</span>, <span class="dv">5</span>)),</span>
+<span>                     <span class="at">score =</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">14</span>, <span class="dv">9</span>, <span class="dv">12</span>, <span class="dv">13</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">17</span>, <span class="dv">22</span>, <span class="dv">19</span>))</span>
+<span><span class="fu">str</span>(study1)</span>
+<span><span class="fu">head</span>(study1, <span class="dv">3</span>)</span></code></pre></div>
+<p>All three lists must have exactly 10 values or R will refuse to build
+it.</p>
+</details>
+
+<p><strong>B4.</strong> From <code>study1</code>, show only the
+treatment participants.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>study1[study1<span class="sc">$</span>condition <span class="sc">==</span> <span class="st">&quot;treatment&quot;</span>, ]</span></code></pre></div>
+<p>Note the <strong>two</strong> equals signs — you are asking a
+question, not storing a value.</p>
+</details>
+
+<hr />
+<h2 id="part-c--describing-a-real-dataset">Part C — Describing a real
+dataset</h2>
+<p>Use the built-in <code>attitude</code> dataset.</p>
+<p><strong>C1.</strong> How many rows and columns does it have? What are
+the variables called?</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">str</span>(attitude)     <span class="co"># answers both questions at once</span></span>
+<span><span class="fu">dim</span>(attitude)     <span class="co"># 30 rows, 7 columns</span></span>
+<span><span class="fu">names</span>(attitude)</span></code></pre></div>
+</details>
+
+<p><strong>C2.</strong> Report the mean and standard deviation of
+<code>learning</code>.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">mean</span>(attitude<span class="sc">$</span>learning)   <span class="co"># 56.36667</span></span>
+<span><span class="fu">sd</span>(attitude<span class="sc">$</span>learning)     <span class="co"># 11.73696</span></span></code></pre></div>
+<p>Written up: <em>M</em> = 56.37, <em>SD</em> = 11.74.</p>
+</details>
+
+<p><strong>C3.</strong> Make a histogram of <code>learning</code> with a
+title and an x-axis label.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">hist</span>(attitude<span class="sc">$</span>learning,</span>
+<span>     <span class="at">main =</span> <span class="st">&quot;Opportunity to learn&quot;</span>,</span>
+<span>     <span class="at">xlab =</span> <span class="st">&quot;Score (0-100)&quot;</span>,</span>
+<span>     <span class="at">col =</span> <span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+</details>
+
+<p><strong>C4.</strong> How many departments scored above 70 on
+<code>rating</code>?</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">sum</span>(attitude<span class="sc">$</span>rating <span class="sc">&gt;</span> <span class="dv">70</span>)   <span class="co"># 10</span></span></code></pre></div>
+<p>This works because R counts every TRUE as 1.</p>
+</details>
+
+<hr />
+<h2 id="part-d--relationships">Part D — Relationships</h2>
+<p><strong>D1.</strong> Is <code>learning</code> related to
+<code>rating</code>? Run the correlation with its significance test,
+then write one sentence reporting it.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">cor.test</span>(attitude<span class="sc">$</span>learning, attitude<span class="sc">$</span>rating)</span></code></pre></div>
+<p><em>r</em> = .62, <em>t</em>(28) = 4.22, <em>p</em> &lt; .001.</p>
+<p><strong>Write-up:</strong> Departments offering more opportunity to
+learn were rated more highly overall, <em>r</em> = .62, <em>p</em> &lt;
+.001.</p>
+</details>
+
+<p><strong>D2.</strong> Draw a scatterplot of <code>learning</code> (x)
+against <code>rating</code> (y), with the line of best fit on top.</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">plot</span>(attitude<span class="sc">$</span>learning, attitude<span class="sc">$</span>rating,</span>
+<span>     <span class="at">xlab =</span> <span class="st">&quot;Opportunity to learn&quot;</span>,</span>
+<span>     <span class="at">ylab =</span> <span class="st">&quot;Overall rating&quot;</span>,</span>
+<span>     <span class="at">pch =</span> <span class="dv">19</span>)</span>
+<span></span>
+<span><span class="fu">abline</span>(<span class="fu">lm</span>(rating <span class="sc">~</span> learning, <span class="at">data =</span> attitude), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+</details>
+
+<p><strong>D3.</strong> Run a regression predicting <code>rating</code>
+from <code>learning</code>. What does the slope mean in plain
+English?</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> learning, <span class="at">data =</span> attitude)</span>
+<span><span class="fu">summary</span>(m1)</span></code></pre></div>
+<p>Slope = 0.65, <em>t</em>(28) = 4.22, <em>p</em> &lt; .001,
+<em>R</em>² = .39.</p>
+<p><strong>In plain English:</strong> for every 1 point higher a
+department scored on "opportunity to learn", its overall rating was
+about 0.65 points higher. Learning opportunity explains roughly 39% of
+the differences between departments.</p>
+</details>
+
+<p><strong>D4.</strong> Now add <code>complaints</code> as a second
+predictor. Did <em>R</em>² go up?</p>
+<details>
+<summary>Show answer</summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> learning <span class="sc">+</span> complaints, <span class="at">data =</span> attitude)</span>
+<span><span class="fu">summary</span>(m2)</span></code></pre></div>
+<p><em>R</em>² rises from about .39 to about .71 — but notice that
+<code>learning</code> is now much weaker. Once you account for how
+complaints are handled, learning opportunity adds relatively little.
+This is a good example of why adding predictors changes what the earlier
+ones mean.</p>
+</details>
+
+<hr />
+<h2 id="a-script-template">A script template</h2>
+<p>Copy this into a file called <code>template.R</code> and start every
+assignment from it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># PSYC531 Assignment X ----</span></span>
+<span><span class="co"># Name:</span></span>
+<span><span class="co"># Date:</span></span>
+<span></span>
+<span><span class="co"># 0. Setup ----</span></span>
+<span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)</span>
+<span><span class="fu">library</span>(psych)</span>
+<span></span>
+<span><span class="co"># 1. Load the data ----</span></span>
+<span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;mydata.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span><span class="fu">str</span>(mydata)</span>
+<span></span>
+<span><span class="co"># 2. Descriptive statistics ----</span></span>
+<span>psych<span class="sc">::</span><span class="fu">describe</span>(mydata)</span>
+<span></span>
+<span><span class="co"># 3. Graphs ----</span></span>
+<span></span>
+<span><span class="co"># 4. Analyses ----</span></span>
+<span></span>
+<span><span class="co"># 5. What I found ----</span></span>
+<span><span class="co"># (write your interpretation here as notes)</span></span></code></pre></div>
+<p>Every heading ends in four dashes, so you can collapse sections and
+jump between them.</p>
+<hr />
+<h2 id="when-something-goes-wrong">When something goes wrong</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>Usual cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>could not find function "X"</code></td>
+<td>Typo, wrong capitals, or package not loaded</td>
+<td>Check spelling; run <code>library(thepackage)</code></td>
+</tr>
+<tr class="even">
+<td><code>object 'X' not found</code></td>
+<td>You never created it, or spelled it differently</td>
+<td>Check the Environment panel for the real name</td>
+</tr>
+<tr class="odd">
+<td><code>there is no package called 'X'</code></td>
+<td>Never installed</td>
+<td><code>install.packages("X")</code> with quotes</td>
+</tr>
+<tr class="even">
+<td><code>cannot open file … No such file</code></td>
+<td>Wrong folder or filename</td>
+<td><code>getwd()</code> then <code>list.files()</code></td>
+</tr>
+<tr class="odd">
+<td><code>unexpected symbol</code> or <code>unexpected ')'</code></td>
+<td>Missing comma, quote, or bracket</td>
+<td>Check the line <strong>above</strong> the one R names</td>
+</tr>
+<tr class="even">
+<td>Console shows <code>+</code> and nothing happens</td>
+<td>Unfinished command</td>
+<td>Press <strong>Esc</strong>, then fix the missing bracket or
+quote</td>
+</tr>
+<tr class="odd">
+<td>Results changed and you don't know why</td>
+<td>Leftovers from an earlier run</td>
+<td><strong>Session → Restart R</strong>, then run your script from the
+top</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="want-more-practice">Want more practice?</h2>
+<ul>
+<li><a href="https://swirlstats.com/">swirl</a> — an interactive
+tutorial that runs inside R itself:
+<code>install.packages("swirl")</code>, then <code>library(swirl)</code>
+and <code>swirl()</code></li>
+<li><a href="https://posit.co/resources/cheatsheets/">Posit cheat
+sheets</a> — print the base R one</li>
+<li><a href="https://stats.oarc.ucla.edu/r/">UCLA statistics help</a> —
+worked examples for psychology analyses</li>
+</ul>
+    <div class="pager">
+<a class="prev" href="03-analysis.html">← Statistics in R</a>
+</div>
+  </div>
+</div>
+</body>
+</html>

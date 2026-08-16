@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install R and RStudio | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li class="current"><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+<ol class="sub">
+<li><a href="#step-1--install-r-version-461">Step 1 — Install R (version
+4.6.1)</a></li>
+<li><a href="#step-2--install-rstudio-version-2026080">Step 2 — Install
+RStudio (version 2026.08.0)</a></li>
+<li><a href="#step-3--open-rstudio-and-find-your-way-around">Step 3 — Open
+RStudio and find your way around</a></li>
+<li><a href="#step-4--check-that-it-works">Step 4 — Check that it works</a></li>
+<li><a href="#step-5--install-your-first-add-on">Step 5 — Install your first
+add-on</a></li>
+<li><a href="#step-6--make-a-course-folder">Step 6 — Make a course folder</a></li>
+<li><a href="#no-computer-to-install-on">No computer to install on?</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ol>
+</li>
+<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+</li>
+<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>Lesson 0 — Install R and
+RStudio</h1>
+<p>You need two programs. They work together:</p>
+<ul>
+<li><strong>R</strong> is the engine that does the statistics.</li>
+<li><strong>RStudio</strong> is the dashboard you actually sit in front
+of.</li>
+</ul>
+<div class="note">
+<p class="note-label">Watch out</p>
+
+<p>Install <strong>R first</strong>, then RStudio. RStudio looks for R
+when it starts up, so the order matters.</p>
+</div>
+
+<hr />
+<h2 id="step-1--install-r-version-461">Step 1 — Install R (version
+4.6.1)</h2>
+<p>Do this even if you have used R before. Old versions cause problems
+later in the term.</p>
+<p><strong>Windows:</strong> go to <a
+href="https://cran.r-project.org/bin/windows/base/">https://cran.r-project.org/bin/windows/base/</a>
+and click the big link at the top, <em>Download R-4.6.1 for
+Windows</em>.</p>
+<p><strong>Mac:</strong> go to <a
+href="https://cran.r-project.org/bin/macosx/">https://cran.r-project.org/bin/macosx/</a>
+and choose:</p>
+<ul>
+<li><code>R-4.6.1-arm64.pkg</code> if your Mac has an Apple chip (M1,
+M2, M3, M4)</li>
+<li><code>R-4.6.1-x86_64.pkg</code> if it has an Intel chip</li>
+</ul>
+<p>Not sure which? Apple menu → <em>About This Mac</em> → look at the
+<strong>Chip</strong> or <strong>Processor</strong> line.</p>
+<p>Then open the file you downloaded and keep clicking
+<strong>Next</strong> or <strong>Continue</strong>. The default settings
+are correct. If it asks a yes/no question, say yes.</p>
+<hr />
+<h2 id="step-2--install-rstudio-version-2026080">Step 2 — Install
+RStudio (version 2026.08.0)</h2>
+<p>Go to <a
+href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a>
+and scroll to <strong>Install RStudio</strong>. The page detects your
+computer and offers the right file. Download it, open it, accept the
+defaults. It is free.</p>
+<p><strong>Already have RStudio?</strong> Open it and choose
+<strong>Help → Check for Updates</strong>.</p>
+<div class="note">
+<p class="note-label">Tip</p>
+
+<p>If you just installed a new R, point RStudio at it: <strong>Tools →
+Global Options → General → R version → Change…</strong>, pick R 4.6.1,
+then restart RStudio.</p>
+</div>
+
+<hr />
+<h2 id="step-3--open-rstudio-and-find-your-way-around">Step 3 — Open
+RStudio and find your way around</h2>
+<p>Open <strong>RStudio</strong> — the blue circle with a white R. (If
+you open a plain white window with no panels, that is base R. Close
+it.)</p>
+<p>Click <strong>File → New File → R Script</strong>. Now your window is
+split into four panels:</p>
+<p><img src="rstudio-panes.png"
+alt="The RStudio window, showing the script panel (A, top left), the console (B, bottom left), the environment (C, top right), and the plots panel (D, bottom right)" /></p>
+<table>
+<thead>
+<tr class="header">
+<th>Panel</th>
+<th>What it is for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong> top left</td>
+<td>Write your code here and save it. <strong>This is your
+homework.</strong></td>
+</tr>
+<tr class="even">
+<td><strong>B</strong> bottom left</td>
+<td>Results appear here. Not saved when you close R.</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong> top right</td>
+<td>Shows your data and anything you have created.</td>
+</tr>
+<tr class="even">
+<td><strong>D</strong> bottom right</td>
+<td>Graphs, help pages, and your files.</td>
+</tr>
+</tbody>
+</table>
+<p>Missing a panel? Use <strong>View → Panes → Show All
+Panes</strong>.</p>
+<hr />
+<h2 id="step-4--check-that-it-works">Step 4 — Check that it works</h2>
+<p>Click in panel A and type these two lines. Then highlight them and
+press <strong>Ctrl + Enter</strong> (Windows) or <strong>Cmd +
+Return</strong> (Mac).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>R.version.string</span>
+<span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<p>In the console (panel B):</p>
+<pre><code>[1] &quot;R version 4.6.1 (2026-06-24)&quot;
+[1] 4</code></pre>
+<p>If it says a version older than 4.6.1, go back to Step 1, then check
+<strong>Tools → Global Options → General</strong>.</p>
+</details>
+
+<hr />
+<h2 id="step-5--install-your-first-add-on">Step 5 — Install your first
+add-on</h2>
+<p>R comes with the basics. <strong>Packages</strong> are add-ons other
+researchers wrote and shared — think of them as apps. You download an
+app once, then open it whenever you need it.</p>
+<p>Type these two lines and run them:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">install.packages</span>(<span class="st">&quot;car&quot;</span>)   <span class="co"># download it (needs internet) — do this once</span></span>
+<span><span class="fu">library</span>(car)              <span class="co"># open it — do this every session</span></span></code></pre></div>
+<p>Lots of red text will scroll past while it downloads. <strong>Red
+text is not automatically bad.</strong> It only went wrong if you see
+the word <code>Error</code>.</p>
+<div class="note">
+<p class="note-label">Careful</p>
+
+<p>Spelling and capitals matter. <code>install.packages("Car")</code>
+fails. It is <code>car</code>, all lowercase, in quotes.</p>
+</div>
+
+<details>
+<summary><b>It didn't work</b></summary>
+
+<br>
+
+<ul>
+<li>Check your internet, then try again — the download servers are
+sometimes busy.</li>
+<li>Check the quotes and the spelling:
+<code>install.packages("car")</code>.</li>
+<li>If R asks <em>"install from sources… which needs compilation?"</em>,
+answering <strong>no</strong> is safe.</li>
+<li>On a locked-down school computer, let R install to a "personal
+library" if it offers.</li>
+</ul>
+</details>
+
+<hr />
+<h2 id="step-6--make-a-course-folder">Step 6 — Make a course folder</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Create a folder called
+<code>PSYC531</code> on your Desktop or in Documents</label></li>
+<li><label><input type="checkbox" />Save every script you write for this
+course inside it</label></li>
+</ul>
+<p>Do not leave course files in your Downloads folder. You will lose
+them.</p>
+<hr />
+<h2 id="no-computer-to-install-on">No computer to install on?</h2>
+<p>If you are using a Chromebook or a locked school laptop, you can run
+RStudio in a web browser at <a
+href="https://posit.cloud">https://posit.cloud</a>. Make a free account,
+click <strong>New Project → New RStudio Project</strong>, and you get
+the same four panels. Everything in these lessons works there too. The
+free version limits your hours per month, so use it as a backup rather
+than your main setup.</p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Do I need both programs, or is RStudio enough?</b></summary>
+
+<br>
+
+<p>Both. RStudio is only the dashboard — without R installed, there is
+no engine to run your code.</p>
+</details>
+
+<details>
+<summary><b>How often do I run <code>install.packages("car")</code>?</b></summary>
+
+<br>
+
+<p>Once. But you need <code>library(car)</code> <strong>every time you
+open R</strong>. Install = download the app. Library = open the app.</p>
+</details>
+    <div class="pager">
+<a class="prev" href="index.html">← Introduction</a>
+<a class="next" href="01-r-basics.html">R basics →</a>
+</div>
+  </div>
+</div>
+</body>
+</html>

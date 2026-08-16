@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Introduction | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li class="current"><a href="index.html">Introduction</a>
+<ol class="sub">
+<li><a href="#the-lessons">The lessons</a></li>
+<li><a href="#before-your-first-lab">Before your first lab</a></li>
+<li><a href="#five-things-to-know-before-you-start">Five things to know before
+you start</a></li>
+<li><a href="#where-to-get-help">Where to get help</a></li>
+</ol>
+</li>
+<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+</li>
+<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>PSYC531 — Introduction to R</h1>
+<p>R is free software for doing statistics. This guide teaches you
+enough to run the analyses in this course.</p>
+<p><strong>No programming background needed.</strong> If you can follow
+a recipe, you can do this. Take one lesson at a time, and type the code
+out yourself instead of just reading it.</p>
+<div class="note">
+<p class="note-label">Note</p>
+
+<p><strong>Versions we use (August 2026):</strong> R
+<strong>4.6.1</strong> and RStudio <strong>2026.08.0</strong>. Install R
+first, RStudio second. <a href="00-install.html">Lesson 0</a> walks you
+through it.</p>
+</div>
+
+<hr />
+<h2 id="the-lessons">The lessons</h2>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Lesson</th>
+<th>You will learn to</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td><a href="00-install.html">Install R and RStudio</a></td>
+<td>Get the software running</td>
+<td>30 min</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><a href="01-r-basics.html">R basics</a></td>
+<td>Run code and save results</td>
+<td>30 min</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><a href="02-data.html">Working with data</a></td>
+<td>Open a dataset and look at it</td>
+<td>30 min</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><a href="03-analysis.html">Statistics in R</a></td>
+<td>Means, graphs, and regression</td>
+<td>45 min</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><a href="04-exercises.html">Practice</a></td>
+<td>Try it yourself, with answers</td>
+<td>45 min</td>
+</tr>
+</tbody>
+</table>
+<p>Work through them in order — each one builds on the last.</p>
+<hr />
+<h2 id="before-your-first-lab">Before your first lab</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Install <strong>R
+4.6.1</strong></label></li>
+<li><label><input type="checkbox" />Install <strong>RStudio
+2026.08.0</strong></label></li>
+<li><label><input type="checkbox" />Open RStudio and see four
+panes</label></li>
+<li><label><input type="checkbox" />Make a folder on your computer
+called <code>PSYC531</code></label></li>
+<li><label><input type="checkbox" />Read <a
+href="01-r-basics.html">Lesson 1</a></label></li>
+</ul>
+<hr />
+<h2 id="five-things-to-know-before-you-start">Five things to know before
+you start</h2>
+<ol type="1">
+<li><strong>R is case-sensitive.</strong> <code>mean</code> works.
+<code>Mean</code> does not.</li>
+<li><strong>Errors are normal.</strong> Everyone gets them, every day.
+They are messages, not failures.</li>
+<li><strong>Read the error out loud.</strong> It usually names the
+problem: a missing bracket, a misspelled word.</li>
+<li><strong>Searching is part of the job.</strong> Professional
+researchers look up R code constantly. Paste your error message into a
+search bar and you will usually find the answer.</li>
+<li><strong>Click the grey triangles.</strong> Sections that say
+<em>Show answer</em> are hidden on purpose. Try first, then peek.</li>
+</ol>
+<hr />
+<h2 id="where-to-get-help">Where to get help</h2>
+<ul>
+<li>Inside R, type <code>?mean</code> to open the help page for any
+function.</li>
+<li><a href="https://posit.co/resources/cheatsheets/">Posit cheat
+sheets</a> — one-page summaries worth printing.</li>
+<li><a href="https://stats.oarc.ucla.edu/r/">UCLA statistics help</a> —
+worked examples of psychology analyses.</li>
+<li><a href="https://stackoverflow.com/questions/tagged/r">Stack
+Overflow</a> — search your error message here.</li>
+<li>Office hours. Bring your script and the exact error message.</li>
+</ul>
+<p>Assignments, data files, and due dates are on Canvas. This site
+covers the software only.</p>
+<p><strong>Start here → <a href="00-install.html">Lesson 0: Install R
+and RStudio</a></strong></p>
+    <div class="pager">
+<a class="next" href="00-install.html">Install R and RStudio →</a>
+</div>
+  </div>
+</div>
+</body>
+</html>

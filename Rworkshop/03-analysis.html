@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statistics in R | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+</li>
+<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+</li>
+<li class="current"><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+<ol class="sub">
+<li><a href="#1-describing-one-variable">1. Describing one variable</a></li>
+<li><a href="#2-missing-values">2. Missing values</a></li>
+<li><a href="#3-graphs">3. Graphs</a></li>
+<li><a href="#4-correlation">4. Correlation</a></li>
+<li><a href="#5-scatterplots">5. Scatterplots</a></li>
+<li><a href="#6-linear-regression">6. Linear regression</a></li>
+<li><a href="#7-logistic-regression">7. Logistic regression</a></li>
+<li><a href="#8-three-other-tests-you-will-need">8. Three other tests you will
+need</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ol>
+</li>
+<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>Lesson 3 — Statistics in R</h1>
+<p>In this lesson: describe a variable, draw a graph, and run a
+regression — and, more importantly, say in plain English what the output
+means.</p>
+<p>Start a new script called <code>lesson03.R</code> and begin with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())         <span class="co"># clean start</span></span>
+<span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)   <span class="co"># full numbers, not 1.98e-08</span></span>
+<span><span class="fu">library</span>(psych)          <span class="co"># for quick descriptive tables</span></span></code></pre></div>
+<p>We are still using <code>attitude</code> (30 departments, workplace
+survey scores) from <a href="02-data.html">Lesson 2</a>.</p>
+<hr />
+<h2 id="1-describing-one-variable">1. Describing one variable</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)      <span class="co"># average</span></span>
+<span><span class="fu">median</span>(attitude<span class="sc">$</span>rating)    <span class="co"># middle value</span></span>
+<span><span class="fu">sd</span>(attitude<span class="sc">$</span>rating)        <span class="co"># standard deviation</span></span>
+<span><span class="fu">var</span>(attitude<span class="sc">$</span>rating)       <span class="co"># variance</span></span>
+<span><span class="fu">min</span>(attitude<span class="sc">$</span>rating)       <span class="co"># lowest</span></span>
+<span><span class="fu">max</span>(attitude<span class="sc">$</span>rating)       <span class="co"># highest</span></span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>[1] 64.63333
+[1] 65.5
+[1] 12.17256
+[1] 148.1713
+[1] 40
+[1] 85</code></pre>
+<p>Written up in APA style, that first pair is: <em>M</em> = 64.63,
+<em>SD</em> = 12.17.</p>
+</details>
+
+<h3 id="all-variables-at-once">All variables at once</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>psych<span class="sc">::</span><span class="fu">describe</span>(attitude)</span></code></pre></div>
+<p>This gives you a table with the number of cases, mean, SD, median,
+minimum, maximum, skew, and kurtosis for every variable — usually
+everything you need for a "descriptive statistics" table in a
+report.</p>
+<p>Writing <code>psych::describe()</code> rather than
+<code>describe()</code> just tells R which package the command came
+from. It is a good habit and prevents a common source of confusing
+errors.</p>
+<h3 id="counting-categories">Counting categories</h3>
+<p>For a grouping variable, counts are what you want, not a mean:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">table</span>(ExerciseData<span class="sc">$</span>Group)               <span class="co"># how many in each group</span></span>
+<span><span class="fu">prop.table</span>(<span class="fu">table</span>(ExerciseData<span class="sc">$</span>Group))   <span class="co"># as proportions</span></span></code></pre></div>
+<hr />
+<h2 id="2-missing-values">2. Missing values</h2>
+<p>If any value is missing, R refuses to guess:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)                  <span class="co"># a number</span></span>
+<span><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="cn">NA</span>))                      <span class="co"># NA — R will not just skip it</span></span>
+<span><span class="fu">mean</span>(<span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">8</span>, <span class="cn">NA</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)        <span class="co"># 6 — now you have told it to skip</span></span>
+<span><span class="fu">sum</span>(<span class="fu">is.na</span>(attitude<span class="sc">$</span>rating))            <span class="co"># how many are missing? (0 here)</span></span></code></pre></div>
+<p><code>na.rm = TRUE</code> means "remove the missing values first".
+Add it when you need it, and always report how many cases you
+dropped.</p>
+<hr />
+<h2 id="3-graphs">3. Graphs</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">hist</span>(attitude<span class="sc">$</span>rating)      <span class="co"># histogram — the shape of one variable</span></span>
+<span><span class="fu">boxplot</span>(attitude<span class="sc">$</span>rating)   <span class="co"># boxplot — median, spread, outliers</span></span></code></pre></div>
+<p>Add labels so the graph makes sense to someone else:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">hist</span>(attitude<span class="sc">$</span>rating,</span>
+<span>     <span class="at">main =</span> <span class="st">&quot;Overall department rating&quot;</span>,   <span class="co"># title</span></span>
+<span>     <span class="at">xlab =</span> <span class="st">&quot;Rating (0-100)&quot;</span>,              <span class="co"># x-axis label</span></span>
+<span>     <span class="at">col =</span> <span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+<p>Graphs appear in the bottom-right panel. Use <strong>Export → Save as
+Image</strong> to get a file you can paste into a paper.</p>
+<details>
+<summary><b>Nicer graphs with ggplot2 (optional)</b></summary>
+
+<br>
+
+<p><code>ggplot2</code> makes publication-quality figures. It builds a
+graph in layers joined by <code>+</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">library</span>(ggplot2)</span>
+<span></span>
+<span><span class="fu">ggplot</span>(attitude, <span class="fu">aes</span>(<span class="at">x =</span> complaints, <span class="at">y =</span> rating)) <span class="sc">+</span></span>
+<span>  <span class="fu">geom_point</span>() <span class="sc">+</span>                              <span class="co"># add the dots</span></span>
+<span>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span>                <span class="co"># add a straight line of best fit</span></span>
+<span>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Complaint handling&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Overall rating&quot;</span>) <span class="sc">+</span></span>
+<span>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+<p>You do not need this for the course, but it is worth knowing it
+exists.</p>
+</details>
+
+<hr />
+<h2 id="4-correlation">4. Correlation</h2>
+<p>Does handling complaints well go with a higher overall rating?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">cor</span>(attitude<span class="sc">$</span>rating, attitude<span class="sc">$</span>complaints)        <span class="co"># just the correlation</span></span>
+<span><span class="fu">cor.test</span>(attitude<span class="sc">$</span>rating, attitude<span class="sc">$</span>complaints)   <span class="co"># with a significance test</span></span></code></pre></div>
+<details>
+<summary><b>Show what you should see, and how to report it</b></summary>
+
+<br>
+
+<pre><code>    Pearson&#39;s product-moment correlation
+
+t = 7.737, df = 28, p-value = 0.00000001988
+95 percent confidence interval:
+ 0.6620128 0.9139139
+sample estimates:
+      cor
+0.8254176</code></pre>
+<p>The three numbers you need are the correlation (0.83), the degrees of
+freedom (28), and the p-value.</p>
+<p><strong>Write-up:</strong> Departments that handled complaints better
+were rated more highly overall, <em>r</em> = .83, 95% CI [.66, .91],
+<em>p</em> &lt; .001.</p>
+</details>
+
+<p>To see all the correlations at once:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">round</span>(<span class="fu">cor</span>(attitude), <span class="dv">2</span>)   <span class="co"># correlation matrix, rounded to 2 decimals</span></span></code></pre></div>
+<hr />
+<h2 id="5-scatterplots">5. Scatterplots</h2>
+<p>A correlation should always be looked at, not just calculated:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">plot</span>(attitude<span class="sc">$</span>complaints, attitude<span class="sc">$</span>rating,     <span class="co"># x first, then y</span></span>
+<span>     <span class="at">xlab =</span> <span class="st">&quot;Complaint handling&quot;</span>,</span>
+<span>     <span class="at">ylab =</span> <span class="st">&quot;Overall rating&quot;</span>,</span>
+<span>     <span class="at">pch =</span> <span class="dv">19</span>)                                  <span class="co"># solid dots</span></span>
+<span></span>
+<span><span class="fu">abline</span>(<span class="fu">lm</span>(rating <span class="sc">~</span> complaints, <span class="at">data =</span> attitude), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)   <span class="co"># add the line of best fit</span></span></code></pre></div>
+<hr />
+<h2 id="6-linear-regression">6. Linear regression</h2>
+<p><strong>Question:</strong> does complaint handling predict a
+department's overall rating?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>lm_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> complaints, <span class="at">data =</span> attitude)</span>
+<span><span class="fu">summary</span>(lm_model)</span></code></pre></div>
+<p>The <code>~</code> means "predicted by". Read
+<code>rating ~ complaints</code> as <strong>"rating predicted by
+complaints"</strong> — the outcome always goes on the left.</p>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>Coefficients:
+            Estimate Std. Error t value     Pr(&gt;|t|)
+(Intercept) 14.37632    6.61999   2.172       0.0385 *
+complaints   0.75461    0.09753   7.737 0.0000000199 ***
+---
+Multiple R-squared:  0.6813,    Adjusted R-squared:  0.6699
+F-statistic: 59.86 on 1 and 28 DF,  p-value: 0.00000001988</code></pre>
+</details>
+
+<h3 id="reading-the-output">Reading the output</h3>
+<table>
+<thead>
+<tr class="header">
+<th>What you see</th>
+<th>Here</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>(Intercept)</code> estimate</td>
+<td>14.38</td>
+<td>The predicted rating for a department scoring 0 on complaint
+handling. Not realistic, but the maths needs a starting point</td>
+</tr>
+<tr class="even">
+<td><code>complaints</code> estimate</td>
+<td>0.75</td>
+<td><strong>The important one.</strong> For every 1 point higher on
+complaint handling, the overall rating goes up 0.75 points</td>
+</tr>
+<tr class="odd">
+<td>`Pr(&gt;</td>
+<td>t</td>
+<td>)`</td>
+</tr>
+<tr class="even">
+<td><code>Multiple R-squared</code></td>
+<td>0.68</td>
+<td>Complaint handling explains about 68% of the differences in overall
+rating</td>
+</tr>
+<tr class="odd">
+<td><code>*</code>, <code>**</code>, <code>***</code></td>
+<td></td>
+<td>Shorthand for p &lt; .05, .01, .001. Report the actual number, not
+the stars</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Write-up:</strong> Complaint handling significantly predicted
+overall department rating, <em>b</em> = 0.75, <em>SE</em> = 0.10,
+<em>t</em>(28) = 7.74, <em>p</em> &lt; .001, <em>R</em>² = .68.</p>
+<h3 id="adding-a-second-predictor">Adding a second predictor</h3>
+<p>Just use a <code>+</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>lm_model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> complaints <span class="sc">+</span> learning, <span class="at">data =</span> attitude)</span>
+<span><span class="fu">summary</span>(lm_model2)</span></code></pre></div>
+<p>Each slope now means "the effect of this variable, holding the other
+one constant".</p>
+<hr />
+<h2 id="7-logistic-regression">7. Logistic regression</h2>
+<p>Use this when your outcome has only <strong>two</strong> possible
+answers — yes/no, passed/failed, group A/group B — instead of being a
+score.</p>
+<p>We switch to another built-in dataset, <code>infert</code>: 248
+people, where <code>case</code> is 1 for the group with infertility and
+0 for the comparison group, and <code>spontaneous</code> counts earlier
+spontaneous events.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>infert<span class="sc">$</span>case <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(infert<span class="sc">$</span>case)   <span class="co"># tell R this is a category, not a number</span></span>
+<span></span>
+<span>logistic_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(case <span class="sc">~</span> spontaneous,</span>
+<span>                      <span class="at">data =</span> infert,</span>
+<span>                      <span class="at">family =</span> binomial)   <span class="co"># &quot;binomial&quot; is what makes it logistic</span></span>
+<span><span class="fu">summary</span>(logistic_model)</span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>Coefficients:
+            Estimate Std. Error z value         Pr(&gt;|z|)
+(Intercept)  -1.3739     0.1980  -6.940 0.00000000000391 ***
+spontaneous   1.0639     0.1964   5.417 0.00000006053616 ***</code></pre>
+</details>
+
+<h3 id="making-the-numbers-readable">Making the numbers readable</h3>
+<p>Logistic regression reports its results in "log-odds", which nobody
+thinks in. One extra line converts them into <strong>odds
+ratios</strong>, which you can actually explain:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">exp</span>(<span class="fu">coef</span>(logistic_model))</span></code></pre></div>
+<pre><code>(Intercept) spontaneous
+     0.2531      2.8975</code></pre>
+<p><strong>What 2.90 means:</strong> each additional prior spontaneous
+event makes a person about <strong>2.9 times more likely</strong> (in
+odds) to be in the case group, <em>p</em> &lt; .001.</p>
+<p>Rule of thumb: an odds ratio above 1 means the outcome becomes more
+likely, below 1 means less likely, and exactly 1 means no
+relationship.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Linear regression</th>
+<th>Logistic regression</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Use when the outcome is</td>
+<td>a score</td>
+<td>one of two categories</td>
+</tr>
+<tr class="even">
+<td>Command</td>
+<td><code>lm()</code></td>
+<td><code>glm(..., family = binomial)</code></td>
+</tr>
+<tr class="odd">
+<td>Extra step</td>
+<td>none</td>
+<td><code>exp()</code> to get odds ratios</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-three-other-tests-you-will-need">8. Three other tests you will
+need</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># t-test: compare two groups</span></span>
+<span><span class="fu">t.test</span>(len <span class="sc">~</span> supp, <span class="at">data =</span> ToothGrowth)</span>
+<span></span>
+<span><span class="co"># ANOVA: compare three or more groups</span></span>
+<span>aov_model <span class="ot">&lt;-</span> <span class="fu">aov</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span>
+<span><span class="fu">summary</span>(aov_model)</span>
+<span></span>
+<span><span class="co"># chi-square: two categorical variables</span></span>
+<span><span class="fu">chisq.test</span>(<span class="fu">table</span>(infert<span class="sc">$</span>case, infert<span class="sc">$</span>education))</span></code></pre></div>
+<p>The pattern is always the same: <strong>outcome <code>~</code>
+predictor</strong>, then <code>data =</code> your dataset.</p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Q1. In <code>lm(rating ~ learning, data = attitude)</code>, which variable is being predicted?</b></summary>
+
+<br>
+
+<p><code>rating</code>. Whatever sits on the <strong>left</strong> of
+the <code>~</code> is the outcome. <code>learning</code> is the
+predictor.</p>
+</details>
+
+<details>
+<summary><b>Q2. A slope of 0.75, p < .001. Explain it to someone who has never taken statistics.</b></summary>
+
+<br>
+
+<p>"Departments that handled complaints one point better tended to be
+rated about three-quarters of a point higher overall, and a pattern this
+strong is very unlikely to have happened by chance."</p>
+</details>
+
+<details>
+<summary><b>Q3. <code>mean(mydata$score)</code> gives you <code>NA</code>. Why, and what do you do?</b></summary>
+
+<br>
+
+<p>At least one score is missing. Check how many with
+<code>sum(is.na(mydata$score))</code>, then use
+<code>mean(mydata$score, na.rm = TRUE)</code> — and say in your write-up
+how many cases you left out.</p>
+</details>
+
+<details>
+<summary><b>Q4. Your logistic regression gives a coefficient of 0.41. What is the odds ratio?</b></summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">exp</span>(<span class="fl">0.41</span>)   <span class="co"># 1.51</span></span></code></pre></div>
+<p>About 1.5 — the outcome becomes roughly 50% more likely (in odds) for
+each 1-unit increase.</p>
+</details>
+    <div class="pager">
+<a class="prev" href="02-data.html">← Working with data</a>
+<a class="next" href="04-exercises.html">Practice →</a>
+</div>
+  </div>
+</div>
+</body>
+</html>

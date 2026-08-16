@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Working with data | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .lesson{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+</li>
+<li class="current"><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+<ol class="sub">
+<li><a href="#1-a-dataset-to-practise-on">1. A dataset to practise on</a></li>
+<li><a href="#2-looking-at-your-data">2. Looking at your data</a></li>
+<li><a href="#3-getting-one-variable-the--sign">3. Getting one variable: the
+$ sign</a></li>
+<li><a href="#4-opening-your-own-data-file">4. Opening your own data file</a></li>
+<li><a href="#5-typing-in-a-small-dataset-yourself">5. Typing in a small
+dataset yourself</a></li>
+<li><a href="#6-picking-out-rows-and-columns">6. Picking out rows and
+columns</a></li>
+<li><a href="#7-adding-a-new-variable">7. Adding a new variable</a></li>
+<li><a href="#check-yourself">Check yourself</a></li>
+</ol>
+</li>
+<li><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+</li>
+<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+    <h1>Lesson 2 — Working with data</h1>
+<p>In this lesson: open a dataset, look at it properly, build a small
+one yourself, and pull out the rows and columns you need.</p>
+<p>Start a new script called <code>lesson02.R</code>.</p>
+<hr />
+<h2 id="1-a-dataset-to-practise-on">1. A dataset to practise on</h2>
+<p>R comes with practice datasets already built in, so nothing to
+download. We will use one called <strong><code>attitude</code></strong>:
+a survey of employees in 30 departments of a large company. Each
+department has a score from 0 to 100 on seven questions.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>rating</code></td>
+<td>Overall rating of the department</td>
+</tr>
+<tr class="even">
+<td><code>complaints</code></td>
+<td>How well complaints are handled</td>
+</tr>
+<tr class="odd">
+<td><code>privileges</code></td>
+<td>Does not allow special privileges</td>
+</tr>
+<tr class="even">
+<td><code>learning</code></td>
+<td>Opportunity to learn</td>
+</tr>
+<tr class="odd">
+<td><code>raises</code></td>
+<td>Raises are based on performance</td>
+</tr>
+<tr class="even">
+<td><code>critical</code></td>
+<td>Too critical</td>
+</tr>
+<tr class="odd">
+<td><code>advance</code></td>
+<td>Chances for advancement</td>
+</tr>
+</tbody>
+</table>
+<p>Type <code>?attitude</code> any time to read more about it.</p>
+<hr />
+<h2 id="2-looking-at-your-data">2. Looking at your data</h2>
+<p>Never analyse a dataset you have not looked at. These five commands
+are all you need:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">View</span>(attitude)      <span class="co"># opens it like a spreadsheet (capital V!)</span></span>
+<span><span class="fu">str</span>(attitude)       <span class="co"># structure: how many cases, what type each variable is</span></span>
+<span><span class="fu">head</span>(attitude)      <span class="co"># the first 6 rows</span></span>
+<span><span class="fu">dim</span>(attitude)       <span class="co"># how many rows and columns</span></span>
+<span><span class="fu">summary</span>(attitude)   <span class="co"># lowest, highest, and average of every variable</span></span></code></pre></div>
+<details>
+<summary><b>Show what <code>str(attitude)</code> gives you</b></summary>
+
+<br>
+
+<pre><code>&#39;data.frame&#39;:   30 obs. of  7 variables:
+ $ rating    : num  43 63 71 61 81 43 58 71 72 67 ...
+ $ complaints: num  51 64 70 63 78 55 67 75 82 61 ...
+ $ privileges: num  30 51 68 45 56 49 42 50 72 45 ...
+ $ learning  : num  39 54 69 47 66 44 56 55 67 47 ...
+ $ raises    : num  61 63 76 54 71 54 66 70 71 62 ...
+ $ critical  : num  92 73 86 84 83 49 68 66 83 80 ...
+ $ advance   : num  45 47 48 35 47 34 35 41 31 41 ...</code></pre>
+<p>Read it as: 30 cases, 7 variables, and every variable is a number
+(<code>num</code>).</p>
+<p><strong><code>str()</code> is the most useful command in R.</strong>
+Run it on every dataset before you do anything else. It tells you
+whether R understood your variables as numbers (<code>num</code>), words
+(<code>chr</code>), or categories (<code>Factor</code>) — and if R got
+that wrong, nothing else will work.</p>
+</details>
+
+<hr />
+<h2 id="3-getting-one-variable-the--sign">3. Getting one variable: the
+<code>$</code> sign</h2>
+<p>A dataset is a table. To grab a single column, put a <code>$</code>
+between the dataset and the variable name:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>attitude<span class="sc">$</span>rating          <span class="co"># the whole rating column</span></span>
+<span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)    <span class="co"># the average rating</span></span></code></pre></div>
+<p>Type <code>attitude$</code> and pause — RStudio pops up a list of the
+variable names. Press <strong>Tab</strong> to fill one in. Use this
+every time; it saves you from typos.</p>
+<hr />
+<h2 id="4-opening-your-own-data-file">4. Opening your own data file</h2>
+<p>When you have your own data, save it from Excel as a
+<strong>.csv</strong> file, put it in your <code>PSYC531</code> folder,
+then tell R where to look:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. tell R which folder to work in (yours will look different)</span></span>
+<span><span class="fu">setwd</span>(<span class="st">&quot;C:/Users/yourname/Desktop/PSYC531&quot;</span>)     <span class="co"># Windows</span></span>
+<span><span class="fu">setwd</span>(<span class="st">&quot;/Users/yourname/Desktop/PSYC531&quot;</span>)       <span class="co"># Mac</span></span>
+<span></span>
+<span><span class="co"># 2. check it worked</span></span>
+<span><span class="fu">getwd</span>()</span>
+<span><span class="fu">list.files</span>()      <span class="co"># shows the files R can see — is your file listed?</span></span>
+<span></span>
+<span><span class="co"># 3. open the file</span></span>
+<span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;myfile.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span></span>
+<span><span class="co"># 4. always look at what arrived</span></span>
+<span><span class="fu">str</span>(mydata)</span>
+<span><span class="fu">head</span>(mydata)</span></code></pre></div>
+<p>Two rules that catch everyone:</p>
+<ul>
+<li>Use <strong>forward slashes</strong> <code>/</code> in the path,
+even on Windows.</li>
+<li>Give the path to the <strong>folder</strong>, not to the file.</li>
+</ul>
+<details>
+<summary><b>How to find your folder path</b></summary>
+
+<br>
+
+<p><strong>Easiest way:</strong> in RStudio's <strong>Files</strong>
+panel (bottom right), click through to your folder, then choose
+<strong>More → Copy Folder Path to Clipboard</strong>. Paste it between
+the quote marks.</p>
+<p><strong>Windows:</strong> open File Explorer, click the address bar,
+copy the path, then change every <code>\</code> to <code>/</code>.</p>
+<p><strong>Mac:</strong> in Finder, right-click the folder, hold down
+<strong>Option</strong>, and choose <em>Copy … as Pathname</em>.</p>
+</details>
+
+<details>
+<summary><b>Common problems opening a file</b></summary>
+
+<br>
+
+<table>
+<thead>
+<tr class="header">
+<th>Message</th>
+<th>What it means</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>cannot open file … No such file or directory</code></td>
+<td>R is looking in the wrong folder, or the name is misspelled</td>
+<td>Run <code>getwd()</code> and <code>list.files()</code></td>
+</tr>
+<tr class="even">
+<td>Columns are named <code>X1</code>, <code>X2</code>…</td>
+<td>Your first row was data, not variable names</td>
+<td>Add a header row in Excel and re-save</td>
+</tr>
+<tr class="odd">
+<td>A number column shows as <code>chr</code></td>
+<td>Something non-numeric is in it (a note, "N/A", a stray comma)</td>
+<td>Fix it in Excel and re-open</td>
+</tr>
+</tbody>
+</table>
+</details>
+
+<p><strong>Saving data back out:</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">write.csv</span>(mydata, <span class="st">&quot;mydata_clean.csv&quot;</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>It appears in your folder. Keep <code>row.names = FALSE</code> or you
+get an extra junk column.</p>
+<hr />
+<h2 id="5-typing-in-a-small-dataset-yourself">5. Typing in a small
+dataset yourself</h2>
+<p>For small studies you can type the data straight into R. The key tool
+is <code>c()</code>, which means "combine these values into a list":</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ID <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)                                <span class="co"># the numbers 1 through 10</span></span>
+<span>ExerciseHours <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>)</span>
+<span>SBP <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">148</span>, <span class="dv">145</span>, <span class="dv">142</span>, <span class="dv">140</span>, <span class="dv">137</span>, <span class="dv">135</span>, <span class="dv">132</span>, <span class="dv">130</span>, <span class="dv">128</span>)   <span class="co"># blood pressure</span></span>
+<span></span>
+<span>Name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Mike&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Tina&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Herbert&quot;</span>, <span class="dv">2</span>),</span>
+<span>          <span class="fu">rep</span>(<span class="st">&quot;Yale&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;YOURNAME&quot;</span>, <span class="dv">2</span>))     <span class="co"># rep = repeat</span></span></code></pre></div>
+<p>Text goes in quotes; numbers do not. Now glue the columns into a
+dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> ID,</span>
+<span>                           <span class="at">Name =</span> Name,</span>
+<span>                           <span class="at">ExerciseHours =</span> ExerciseHours,</span>
+<span>                           <span class="at">SBP =</span> SBP)</span>
+<span>ExerciseData</span></code></pre></div>
+<details>
+<summary><b>Show what you should see</b></summary>
+
+<br>
+
+<pre><code>   ID     Name ExerciseHours SBP
+1   1     Mike             0 150
+2   2     Mike             1 148
+3   3     Tina             2 145
+4   4     Tina             3 142
+5   5  Herbert             4 140
+6   6  Herbert             5 137
+7   7     Yale             6 135
+8   8     Yale             7 132
+9   9 YOURNAME             8 130
+10 10 YOURNAME             9 128</code></pre>
+<p>Every column must have the same number of values. If one has 9 and
+the rest have 10, R stops with
+<code>arguments imply differing number of rows</code>.</p>
+</details>
+
+<hr />
+<h2 id="6-picking-out-rows-and-columns">6. Picking out rows and
+columns</h2>
+<p>Square brackets take two things separated by a comma:
+<strong><code>[rows, columns]</code></strong>. Rows first, columns
+second.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData[<span class="dv">1</span>, ]      <span class="co"># row 1, all columns</span></span>
+<span>ExerciseData[, <span class="dv">2</span>]      <span class="co"># all rows, column 2</span></span>
+<span>ExerciseData[<span class="dv">1</span>, <span class="dv">2</span>]     <span class="co"># row 1, column 2 — one cell</span></span>
+<span></span>
+<span>ExerciseData[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]     <span class="co"># columns 2 and 4</span></span>
+<span>ExerciseData[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), ]     <span class="co"># rows 1 and 5</span></span>
+<span></span>
+<span>ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]              <span class="co"># columns by name — safer</span></span>
+<span>ExerciseData[ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;</span> <span class="dv">5</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
+<p>Save any of these under a new name if you want to keep it:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>short_version <span class="ot">&lt;-</span> ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]</span>
+<span>short_version</span></code></pre></div>
+<div class="note">
+<p class="note-label">Tip</p>
+
+<p>Picking columns by <strong>name</strong> is safer than by number. If
+someone adds a column to the file, the numbers all shift and your code
+quietly analyses the wrong variable.</p>
+</div>
+
+<hr />
+<h2 id="7-adding-a-new-variable">7. Adding a new variable</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># a calculated variable</span></span>
+<span>ExerciseData<span class="sc">$</span>SBP_change <span class="ot">&lt;-</span> ExerciseData<span class="sc">$</span>SBP <span class="sc">-</span> <span class="dv">150</span></span>
+<span></span>
+<span><span class="co"># a grouping variable: &quot;active&quot; if 5+ hours, otherwise &quot;less active&quot;</span></span>
+<span>ExerciseData<span class="sc">$</span>Group <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;=</span> <span class="dv">5</span>, <span class="st">&quot;active&quot;</span>, <span class="st">&quot;less active&quot;</span>)</span>
+<span></span>
+<span><span class="fu">table</span>(ExerciseData<span class="sc">$</span>Group)   <span class="co"># how many in each group</span></span></code></pre></div>
+<p><code>ifelse()</code> reads as: <em>if this is true, use the first
+answer, otherwise use the second.</em></p>
+<hr />
+<h2 id="check-yourself">Check yourself</h2>
+<details>
+<summary><b>Q1. Write the code to see the last 4 rows of <code>attitude</code>.</b></summary>
+
+<br>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">tail</span>(attitude, <span class="dv">4</span>)</span></code></pre></div>
+</details>
+
+<details>
+<summary><b>Q2. What is the difference between <code>attitude[3, ]</code> and <code>attitude[, 3]</code>?</b></summary>
+
+<br>
+
+<p><code>attitude[3, ]</code> is the third <strong>row</strong> — one
+department, all seven variables. <code>attitude[, 3]</code> is the third
+<strong>column</strong> — the <code>privileges</code> scores for all 30
+departments.</p>
+<p>The comma placement is the whole difference. Rows first, columns
+second.</p>
+</details>
+
+<details>
+<summary><b>Q3. You open your file and <code>str()</code> shows <code>$ age : chr "23" "31" "twenty"</code>. What happened?</b></summary>
+
+<br>
+
+<p>Someone typed a word into the age column, so R decided the whole
+column was text (<code>chr</code>). Nothing numeric will work on it —
+<code>mean(mydata$age)</code> will fail — until you fix that value in
+the original file and open it again.</p>
+<p>This is exactly why you run <code>str()</code> first.</p>
+</details>
+    <div class="pager">
+<a class="prev" href="01-r-basics.html">← R basics</a>
+<a class="next" href="03-analysis.html">Statistics in R →</a>
+</div>
+  </div>
+</div>
+</body>
+</html>
