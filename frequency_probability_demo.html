@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequency to Probability Demo - PSYC531</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .bag-section {
+            border: 2px solid #e0e0e0;
+            padding: 25px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .bag-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .bag-visualization {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            min-height: 100px;
+        }
+        
+        .ball {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .ball:hover {
+            transform: scale(1.1);
+        }
+        
+        .ball-1 {
+            background: #FF6B6B;
+        }
+        
+        .ball-2 {
+            background: #4ECDC4;
+        }
+        
+        .ball-3 {
+            background: #FFD93D;
+        }
+        
+        .ball-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border-left: 4px solid;
+        }
+        
+        .info-box-1 {
+            border-left-color: #FF6B6B;
+        }
+        
+        .info-box-2 {
+            border-left-color: #4ECDC4;
+        }
+        
+        .info-box-3 {
+            border-left-color: #FFD93D;
+            color: #333;
+        }
+        
+        .info-box label {
+            font-size: 0.9em;
+            color: #666;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .info-box .value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .info-box .count {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .btn-single {
+            background: #FF6B6B;
+            color: white;
+        }
+        
+        .btn-single:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+        }
+        
+        .btn-ten {
+            background: #4ECDC4;
+            color: white;
+        }
+        
+        .btn-ten:hover {
+            background: #3db8af;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(78, 205, 196, 0.4);
+        }
+        
+        .btn-hundred {
+            background: #FFD93D;
+            color: #333;
+        }
+        
+        .btn-hundred:hover {
+            background: #ffd428;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(255, 217, 61, 0.4);
+        }
+        
+        .btn-reset {
+            background: #95a5a6;
+            color: white;
+            flex: 0 0 100%;
+        }
+        
+        .btn-reset:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .draw-results {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .result-value {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .individual-draws {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .small-ball {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .small-ball-1 { background: #FF6B6B; }
+        .small-ball-2 { background: #4ECDC4; }
+        .small-ball-3 { background: #FFD93D; color: #333; }
+        
+        .chart-section {
+            border: 2px solid #e0e0e0;
+            padding: 25px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .chart-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            border-top: 3px solid #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 Frequency to Probability</h1>
+            <p>What is the probability of drawing a 1-point ball?</p>
+        </div>
+        
+        <div class="content">
+            <!-- Left Section: Bag and Controls -->
+            <div class="section">
+                <div class="bag-section">
+                    <div class="bag-title">📦 The Bag</div>
+                    
+                    <div class="bag-visualization" id="bagVisualization">
+                        <!-- Balls will be generated here -->
+                    </div>
+                    
+                    <div class="ball-info">
+                        <div class="info-box info-box-1">
+                            <label>1 Point Balls</label>
+                            <div class="value">4</div>
+                            <div class="count">out of 10 balls</div>
+                        </div>
+                        <div class="info-box info-box-2">
+                            <label>2 Point Balls</label>
+                            <div class="value">3</div>
+                            <div class="count">out of 10 balls</div>
+                        </div>
+                        <div class="info-box info-box-3">
+                            <label>3 Point Balls</label>
+                            <div class="value">3</div>
+                            <div class="count">out of 10 balls</div>
+                        </div>
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn-single" onclick="drawSingle()">Draw 1</button>
+                        <button class="btn-ten" onclick="drawTen()">Draw 10</button>
+                        <button class="btn-hundred" onclick="drawHundred()">Draw 100</button>
+                        <button class="btn-reset" onclick="reset()">Reset</button>
+                    </div>
+                    
+                    <div class="draw-results" id="drawResults" style="display: none;">
+                        <div class="result-title">Last Draw Results:</div>
+                        <div id="resultsContent"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Section: Chart -->
+            <div class="section">
+                <div class="chart-section">
+                    <div class="chart-title">📊 Proportion of 1-Point Balls</div>
+                    <div class="chart-container">
+                        <canvas id="proportionChart"></canvas>
+                    </div>
+                    
+                    <div class="statistics">
+                        <div class="stat-item">
+                            <div class="stat-label">Total Draws</div>
+                            <div class="stat-value" id="totalDraws">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Observed Proportion</div>
+                            <div class="stat-value" id="observedProportion">—</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">True Probability</div>
+                            <div class="stat-value">0.40</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Count of 1s</div>
+                            <div class="stat-value" id="countOnes">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <strong>How to use:</strong> Draw balls and watch how the proportion of 1-point balls converges to the true probability (0.40). 
+            The more draws you make, the closer your observed proportion gets to the actual probability of getting a 1-point ball!
+        </div>
+    </div>
+    
+    <script>
+        // Bag composition
+        const bag = [1, 1, 1, 1, 2, 2, 2, 3, 3, 3];
+        const trueProbability = 0.4; // 4 out of 10 balls are 1-point
+        
+        // Data tracking
+        let allDraws = [];
+        let proportions = [];
+        let chart = null;
+        
+        // Initialize bag visualization
+        function initializeBag() {
+            const bagViz = document.getElementById('bagVisualization');
+            bagViz.innerHTML = '';
+            bag.forEach((value) => {
+                const ball = document.createElement('div');
+                ball.className = `ball ball-${value}`;
+                ball.textContent = value;
+                bagViz.appendChild(ball);
+            });
+        }
+        
+        // Draw a single ball
+        function drawBall() {
+            const randomIndex = Math.floor(Math.random() * bag.length);
+            return bag[randomIndex];
+        }
+        
+        // Draw single ball
+        function drawSingle() {
+            const drawn = drawBall();
+            allDraws.push(drawn);
+            updateChart();
+            showResults([drawn], 'Single Draw');
+        }
+        
+        // Draw 10 balls
+        function drawTen() {
+            const draws = [];
+            for (let i = 0; i < 10; i++) {
+                draws.push(drawBall());
+                allDraws.push(draws[i]);
+            }
+            updateChart();
+            showResults(draws, '10 Draws');
+        }
+        
+        // Draw 100 balls
+        function drawHundred() {
+            for (let i = 0; i < 100; i++) {
+                allDraws.push(drawBall());
+            }
+            updateChart();
+            showResults([], '100 Draws (Summary only)');
+        }
+        
+        // Update the chart
+        function updateChart() {
+            // Calculate running proportions of 1-point balls
+            proportions = [];
+            let countOnes = 0;
+            for (let i = 0; i < allDraws.length; i++) {
+                if (allDraws[i] === 1) {
+                    countOnes++;
+                }
+                proportions.push(countOnes / (i + 1));
+            }
+            
+            // Update statistics
+            document.getElementById('totalDraws').textContent = allDraws.length;
+            const observedProp = proportions[proportions.length - 1].toFixed(2);
+            document.getElementById('observedProportion').textContent = observedProp;
+            document.getElementById('countOnes').textContent = countOnes;
+            
+            // Create or update chart
+            const ctx = document.getElementById('proportionChart').getContext('2d');
+            
+            if (chart) {
+                chart.destroy();
+            }
+            
+            const drawNumbers = Array.from({length: allDraws.length}, (_, i) => i + 1);
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: drawNumbers,
+                    datasets: [
+                        {
+                            label: 'Observed Proportion of 1s',
+                            data: proportions,
+                            borderColor: '#FF6B6B',
+                            backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            fill: true,
+                            pointRadius: allDraws.length > 100 ? 0 : 3,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: '#FF6B6B'
+                        },
+                        {
+                            label: 'True Probability',
+                            data: Array(allDraws.length).fill(trueProbability),
+                            borderColor: '#667eea',
+                            borderDash: [5, 5],
+                            borderWidth: 2,
+                            fill: false,
+                            pointRadius: 0,
+                            tension: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {size: 12},
+                                padding: 15
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1,
+                            title: {
+                                display: true,
+                                text: 'Proportion'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Number of Draws'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Show draw results
+        function showResults(draws, title) {
+            const resultsDiv = document.getElementById('drawResults');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            let html = `<div class="result-title">${title}</div>`;
+            
+            if (draws.length > 0) {
+                const countOnesInDraw = draws.filter(v => v === 1).length;
+                const proportion = (countOnesInDraw / draws.length).toFixed(2);
+                html += `<div>Got <span class="result-value">${countOnesInDraw}</span> ball(s) worth 1 point (${proportion})</div>`;
+                
+                html += '<div class="individual-draws">';
+                draws.forEach(value => {
+                    html += `<div class="small-ball small-ball-${value}">${value}</div>`;
+                });
+                html += '</div>';
+            } else {
+                const last100 = allDraws.slice(-100);
+                const countOnesInDraw = last100.filter(v => v === 1).length;
+                html += `<div>Got <span class="result-value">${countOnesInDraw}</span> ball(s) worth 1 point out of 100</div>`;
+            }
+            
+            resultsContent.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+        
+        // Reset everything
+        function reset() {
+            allDraws = [];
+            proportions = [];
+            document.getElementById('totalDraws').textContent = '0';
+            document.getElementById('observedProportion').textContent = '—';
+            document.getElementById('countOnes').textContent = '0';
+            document.getElementById('drawResults').style.display = 'none';
+            
+            if (chart) {
+                chart.destroy();
+                chart = null;
+            }
+            
+            const ctx = document.getElementById('proportionChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Observed Proportion of 1s',
+                        data: [],
+                        borderColor: '#FF6B6B',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Initialize on load
+        window.addEventListener('load', () => {
+            initializeBag();
+            reset();
+        });
+    </script>
+</body>
+</html>
