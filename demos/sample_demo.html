@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Samples, populations, and the standard error — PSYC 531</title>
+<style>
+  body{
+    background:#fff;
+    color:#000;
+    font-family:Georgia,"Times New Roman",Times,serif;
+    font-size:16px;
+    line-height:1.55;
+    margin:0;
+    padding:36px 22px 70px;
+  }
+  .page{max-width:900px;margin:0 auto}
+
+  h1{font-size:26px;font-weight:normal;margin:0 0 6px}
+  .course{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#555;margin:0 0 18px}
+  h2{font-size:17px;font-weight:bold;margin:30px 0 8px}
+  h3{font-size:15px;font-weight:bold;margin:0 0 4px}
+  p{margin:0 0 12px}
+  .note{font-size:14px;color:#444}
+
+  .box{border:1px solid #000;padding:14px 18px;margin:0 0 20px}
+  .box h2{margin-top:0}
+
+  .mono{font-family:"Courier New",Courier,monospace}
+
+  dl.facts{display:flex;flex-wrap:wrap;gap:26px;margin:0}
+  dl.facts div{margin:0}
+  dl.facts dt{font-size:13px;color:#555;margin:0}
+  dl.facts dd{margin:2px 0 0;font-family:"Courier New",Courier,monospace;font-size:19px}
+
+  fieldset{border:1px solid #000;padding:12px 16px;margin:0 0 16px}
+  legend{font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:0 6px}
+  label.radio{margin-right:18px;font-size:15px}
+
+  button{
+    font-family:Georgia,"Times New Roman",Times,serif;
+    font-size:15px;
+    padding:7px 14px;
+    margin:0 6px 0 0;
+    background:#fff;
+    color:#000;
+    border:1px solid #000;
+    cursor:pointer;
+  }
+  button:hover{background:#eee}
+  button:focus-visible,input:focus-visible{outline:2px solid #000;outline-offset:2px}
+
+  .scroller{max-height:300px;overflow:auto;border:1px solid #000}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  th,td{border-bottom:1px solid #ccc;padding:6px 9px;text-align:left;vertical-align:top}
+  th{
+    position:sticky;top:0;
+    background:#fff;
+    border-bottom:1px solid #000;
+    font-size:13px;
+    font-weight:bold;
+    white-space:nowrap;
+  }
+  td.num,th.num{text-align:right;font-family:"Courier New",Courier,monospace;white-space:nowrap}
+  td.data{font-family:"Courier New",Courier,monospace;font-size:13px;color:#222}
+  tr:last-child td{border-bottom:none}
+  .empty{padding:22px;text-align:center;color:#555;font-size:14px}
+
+  table.summary{border:1px solid #000;font-size:15px}
+  table.summary th{position:static;border-bottom:1px solid #000}
+  table.summary td{font-family:"Courier New",Courier,monospace}
+  table.summary th.rowhead{font-weight:normal;font-family:Georgia,serif;width:58%}
+  table.summary tr.rule td,table.summary tr.rule th{border-top:1px solid #000}
+
+  .panel{border:1px solid #000;padding:12px 14px 8px;margin:0 0 14px}
+  .panel svg{display:block;width:100%;height:auto}
+  .panel .cap{font-size:13.5px;color:#333;margin:2px 0 0}
+  .panel .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+  .panel .hd .tag{font-family:"Courier New",Courier,monospace;font-size:12.5px;color:#555}
+
+  @media (max-width:640px){
+    body{padding:24px 14px 50px}
+    dl.facts{gap:16px}
+    button{margin-bottom:6px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <p class="course">PSYC 531 &middot; Demonstration</p>
+  <h1>Samples, populations, and the standard error</h1>
+  <p>Suppose we are measuring college students' well-being in the states. We developed a scale to measure well-being and are recruiting participants. </p>
+
+  <div class="box">
+    <h2>The population (never observed)</h2>
+    <dl class="facts">
+      <div><dt>Mean &mu;</dt><dd>10.00</dd></div>
+      <div><dt>Standard deviation &sigma;</dt><dd>2.00</dd></div>
+      <div><dt>Shape</dt><dd>Normal</dd></div>
+    </dl>
+    <p class="note" style="margin:12px 0 0">In real research these three values are unknown. Here we fix them so we can check our samples against the truth.</p>
+  </div>
+
+  <fieldset>
+    <legend>Draw a sample</legend>
+    <p style="margin-bottom:10px">
+      <label class="radio"><input type="radio" name="n" value="10" checked> 10 students per sample</label>
+      <label class="radio"><input type="radio" name="n" value="1000"> 1000 students per sample</label>
+    </p>
+    <p style="margin-bottom:8px">
+      <button id="one">Draw 1 sample</button>
+      <button id="many">Repeat 25 times</button>
+      <button id="clear">Clear</button>
+    </p>
+    <p class="note" style="margin:0">You research will have a fixed sample size, that is, you can have 10 participants or 1000 participants. Repeating adds 25 more samples of the size chosen above.</p>
+  </fieldset>
+
+  <h2>Samples drawn</h2>
+  <div class="scroller">
+    <table>
+      <thead>
+        <tr>
+          <th class="num">#</th>
+          <th id="scoresHead">Scores observed</th>
+          <th class="num">Sample mean</th>
+          <th class="num">Sample SD</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="empty" id="empty">No samples yet. Draw one to begin.</p>
+  </div>
+
+  <h2>What the samples tell us</h2>
+  <table class="summary">
+    <tbody>
+      <tr><th class="rowhead">Samples drawn</th><td class="num" id="k">0</td></tr>
+      <tr><th class="rowhead">Students per sample (<span class="mono">n</span>)</th><td class="num" id="nOut">10</td></tr>
+      <tr class="rule"><th class="rowhead">Average of the sample means</th><td class="num" id="gm">&mdash;</td></tr>
+      <tr class="rule"><th class="rowhead">Standard error observed here (how far the sample means typically fall from 10)</th><td class="num" id="seObs">&mdash;</td></tr>
+      <tr><th class="rowhead">Standard error expected in theory (&sigma; &divide; &radic;n)</th><td class="num" id="seThy">0.632</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Two distributions</h2>
+
+  <div class="panel">
+    <div class="hd">
+      <h3>1. Individual students</h3>
+      <span class="tag" id="tagA">0 students measured</span>
+    </div>
+    <svg id="plotA" viewBox="0 0 620 180" role="img" aria-label="Distribution of individual scores"></svg>
+    <p class="cap">10 or 1000 entry per sample (depending on your choice). It has every student measured so far, with the population curve drawn over them.</p>
+  </div>
+
+  <div class="panel">
+    <div class="hd">
+      <h3>2. Sample means</h3>
+      <span class="tag" id="tagB">0 means</span>
+    </div>
+    <svg id="plotB" viewBox="0 0 620 180" role="img" aria-label="Distribution of sample means"></svg>
+    <p class="cap">One entry per sample, on the same horizontal scale as the plot above. </p>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var MU = 10, SIGMA = 2, PREVIEW = 10;
+  var LO = 2, HI = 18, BIN_A = 1;   // integer scores: one bin per whole point
+
+  var rowsEl = document.getElementById('rows');
+  var emptyEl = document.getElementById('empty');
+  var scroller = document.querySelector('.scroller');
+
+  var means = [];
+  var countsA = [], totalA = 0;     // running histogram of every score observed
+
+  function currentN() {
+    return parseInt(document.querySelector('input[name="n"]:checked').value, 10);
+  }
+  function se() { return SIGMA / Math.sqrt(currentN()); }
+
+  // Standard normal deviate (Box-Muller)
+  function randn() {
+    var u = 0, v = 0;
+    while (u === 0) u = Math.random();
+    while (v === 0) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  /* ---------- plotting ---------- */
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  function histogram(values, lo, hi, bw) {
+    var nb = Math.max(1, Math.round((hi - lo) / bw)), c = new Array(nb), i;
+    for (i = 0; i < nb; i++) c[i] = 0;
+    for (i = 0; i < values.length; i++) {
+      var b = Math.floor((values[i] - lo) / bw);
+      if (b < 0) b = 0;
+      if (b >= nb) b = nb - 1;
+      c[b]++;
+    }
+    return c;
+  }
+
+  // opts: counts, lo, hi, bw, W, H, tickStep, markers[], curve(v), xlabel
+  function render(svg, o) {
+    var W = o.W, H = o.H, ml = 38, mr = 12, mt = 12, mb = 30;
+    var pw = W - ml - mr, ph = H - mt - mb;
+    var x = function (v) { return ml + (v - o.lo) / (o.hi - o.lo) * pw; };
+
+    var maxC = 0, i;
+    for (i = 0; i < o.counts.length; i++) if (o.counts[i] > maxC) maxC = o.counts[i];
+
+    var curvePts = null;
+    if (o.curve) {
+      curvePts = [];
+      for (i = 0; i <= 200; i++) {
+        var v = o.lo + (o.hi - o.lo) * i / 200;
+        var yv = o.curve(v);
+        curvePts.push([v, yv]);
+        if (yv > maxC) maxC = yv;
+      }
+    }
+    if (maxC <= 0) maxC = 1;
+    var y = function (c) { return mt + ph - (c / maxC) * ph; };
+
+    var s = '';
+
+    for (i = 0; i < o.counts.length; i++) {
+      if (!o.counts[i]) continue;
+      var x0 = x(o.lo + i * o.bw), x1 = x(o.lo + (i + 1) * o.bw);
+      var w = Math.max(x1 - x0, 1.2);
+      s += '<rect x="' + x0.toFixed(2) + '" y="' + y(o.counts[i]).toFixed(2) +
+           '" width="' + w.toFixed(2) + '" height="' + (mt + ph - y(o.counts[i])).toFixed(2) +
+           '" fill="#d9d9d9" stroke="#000" stroke-width="0.6"/>';
+    }
+
+    if (curvePts) {
+      var d = '';
+      for (i = 0; i < curvePts.length; i++) {
+        d += (i ? 'L' : 'M') + x(curvePts[i][0]).toFixed(2) + ' ' + y(curvePts[i][1]).toFixed(2) + ' ';
+      }
+      s += '<path d="' + d + '" fill="none" stroke="#000" stroke-width="1.2"/>';
+    }
+
+    (o.markers || []).forEach(function (m) {
+      var mx = x(m.v);
+      s += '<line x1="' + mx.toFixed(2) + '" y1="' + mt + '" x2="' + mx.toFixed(2) + '" y2="' + (mt + ph) +
+           '" stroke="#000" stroke-width="1" stroke-dasharray="4 3"/>' +
+           '<text x="' + mx.toFixed(2) + '" y="' + (mt - 2) + '" font-size="10" font-family="Georgia,serif" text-anchor="middle">' +
+           esc(m.label) + '</text>';
+    });
+
+    s += '<line x1="' + ml + '" y1="' + (mt + ph) + '" x2="' + (W - mr) + '" y2="' + (mt + ph) + '" stroke="#000"/>';
+    s += '<line x1="' + ml + '" y1="' + mt + '" x2="' + ml + '" y2="' + (mt + ph) + '" stroke="#000"/>';
+
+    for (var t = o.lo; t <= o.hi + 1e-9; t += o.tickStep) {
+      var tx = x(t);
+      s += '<line x1="' + tx.toFixed(2) + '" y1="' + (mt + ph) + '" x2="' + tx.toFixed(2) + '" y2="' + (mt + ph + 4) + '" stroke="#000"/>' +
+           '<text x="' + tx.toFixed(2) + '" y="' + (mt + ph + 16) + '" font-size="10.5" font-family="Courier New,monospace" text-anchor="middle">' +
+           t.toFixed(0) + '</text>';
+    }
+
+    s += '<text x="' + (ml - 6) + '" y="' + (mt + 8) + '" font-size="10" font-family="Georgia,serif" text-anchor="end">' + maxC.toFixed(0) + '</text>';
+    s += '<text x="' + (ml - 6) + '" y="' + (mt + ph) + '" font-size="10" font-family="Georgia,serif" text-anchor="end">0</text>';
+    s += '<text x="' + (ml + pw / 2) + '" y="' + (H - 4) + '" font-size="11" font-family="Georgia,serif" text-anchor="middle">' + esc(o.xlabel) + '</text>';
+
+    svg.innerHTML = s;
+  }
+
+  function redraw() {
+    render(document.getElementById('plotA'), {
+      counts: countsA, lo: LO - 0.5, hi: HI + 0.5, bw: BIN_A, W: 620, H: 180,
+      tickStep: 2,
+      markers: [{ v: MU, label: '\u03BC = 10' }],
+      curve: totalA ? function (v) {
+        var z = (v - MU) / SIGMA;
+        return totalA * BIN_A * Math.exp(-0.5 * z * z) / (SIGMA * Math.sqrt(2 * Math.PI));
+      } : null,
+      xlabel: 'Well-being score'
+    });
+
+    var bwB = Math.max(se() / 4, 0.012);
+    render(document.getElementById('plotB'), {
+      counts: histogram(means, LO - 0.5, HI + 0.5, bwB), lo: LO - 0.5, hi: HI + 0.5, bw: bwB,
+      W: 620, H: 180, tickStep: 2,
+      markers: [{ v: MU, label: '\u03BC = 10' }],
+      xlabel: 'Sample mean (same scale as plot 1)'
+    });
+
+    document.getElementById('tagA').textContent =
+      totalA.toLocaleString() + (totalA === 1 ? ' student measured' : ' students measured');
+    document.getElementById('tagB').textContent = means.length + (means.length === 1 ? ' mean' : ' means');
+  }
+
+  /* ---------- sampling ---------- */
+
+  function drawOnce() {
+    var n = currentN(), scores = [], sum = 0, i;
+    for (i = 0; i < n; i++) {
+      var x = Math.round(MU + SIGMA * randn());   // whole scale points
+      scores.push(x);
+      sum += x;
+      var b = Math.round(x) - LO;
+      if (b < 0) b = 0;
+      if (b >= countsA.length) b = countsA.length - 1;
+      countsA[b]++;
+      totalA++;
+    }
+    var m = sum / n, ss = 0;
+    for (i = 0; i < n; i++) ss += Math.pow(scores[i] - m, 2);
+    var sd = Math.sqrt(ss / (n - 1));
+    means.push(m);
+
+    var shown = scores.slice(0, Math.min(PREVIEW, n)).join('   ');
+    if (n > PREVIEW) shown += '   \u2026 (' + (n - PREVIEW) + ' more values)';
+
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="num">' + means.length + '</td>' +
+      '<td class="data"></td>' +
+      '<td class="num">' + m.toFixed(3) + '</td>' +
+      '<td class="num">' + sd.toFixed(3) + '</td>';
+    tr.children[1].textContent = shown;
+    rowsEl.appendChild(tr);
+  }
+
+  function drawMany(k) {
+    for (var i = 0; i < k; i++) drawOnce();
+    emptyEl.style.display = 'none';
+    refresh();
+    redraw();
+    scroller.scrollTop = scroller.scrollHeight;
+  }
+
+  function refresh() {
+    var i;
+    document.getElementById('k').textContent = means.length;
+    document.getElementById('nOut').textContent = currentN();
+    document.getElementById('seThy').textContent = se().toFixed(3);
+
+    if (means.length) {
+      var sum = 0;
+      for (i = 0; i < means.length; i++) sum += means[i];
+      var gm = sum / means.length;
+      document.getElementById('gm').textContent = gm.toFixed(3);
+
+      if (means.length > 1) {
+        var ss = 0;
+        for (i = 0; i < means.length; i++) ss += Math.pow(means[i] - gm, 2);
+        document.getElementById('seObs').textContent = Math.sqrt(ss / (means.length - 1)).toFixed(3);
+      } else {
+        document.getElementById('seObs').textContent = '\u2014';
+      }
+    } else {
+      document.getElementById('gm').textContent = '\u2014';
+      document.getElementById('seObs').textContent = '\u2014';
+    }
+  }
+
+  function clearAll() {
+    means = []; totalA = 0;
+    countsA = new Array(HI - LO + 1);
+    for (var i = 0; i < countsA.length; i++) countsA[i] = 0;
+
+    rowsEl.innerHTML = '';
+    emptyEl.style.display = '';
+    document.getElementById('scoresHead').textContent =
+      currentN() === 10 ? 'Scores observed' : 'Scores observed (first 10 shown)';
+    refresh();
+    redraw();
+  }
+
+  document.getElementById('one').addEventListener('click', function () { drawMany(1); });
+  document.getElementById('many').addEventListener('click', function () { drawMany(25); });
+  document.getElementById('clear').addEventListener('click', clearAll);
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="n"]'), function (el) {
+    el.addEventListener('change', clearAll);
+  });
+
+  clearAll();
+})();
+</script>
+</body>
+</html>
