@@ -1,6 +1,6 @@
 # PSYC531 — Introduction to R
 
-This folder is a small website. Read it here:
+This is an introduction to R:
 
 **https://heren-quant.github.io/PSYC531/Rworkshop/**
 
