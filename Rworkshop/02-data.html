@@ -226,17 +226,17 @@ every time; it saves you from typos.</p>
 <h2 id="4-opening-your-own-data-file">4. Opening your own data file</h2>
 <p>Download the <code>sesame.csv</code>code> from Canva and put it in your <code>PSYC531</code> folder,
 then tell R where to look:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. tell R which folder to work in (yours will look different)</span></span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># tell R which folder to work in (yours will look different)</span></span>
 <span><span class="fu">setwd</span>(<span class="st">&quot;yourpath/PSYC531&quot;</span>)     <span class="co"># Windows</span></span>
 <span></span>
-<span><span class="co"># 2. check it worked</span></span>
+<span><span class="co"># check it worked</span></span>
 <span><span class="fu">getwd</span>()</span>
 <span><span class="fu">list.files</span>()      <span class="co"># shows the files R can see — is your file listed?</span></span>
 <span></span>
-<span><span class="co"># 3. open the file</span></span>
+<span><span class="co"># open the file</span></span>
 <span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;sesame.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span></span>
-<span><span class="co"># 4. always look at what arrived</span></span>
+<span><span class="co"># always look at what arrived</span></span>
 <span><span class="fu">str</span>(mydata)</span>
 <span><span class="fu">head</span>(mydata)</span></code></pre></div>
 <p>Two rules that catch everyone:</p>
