@@ -135,7 +135,10 @@ columns</a></li>
 <p>In this Workshop: open a dataset, look at it properly, build a small
 one yourself, and pull out the rows and columns you need.</p>
 <p>Open RStudio, click <strong>File → Open File </strong>, and
-find the <code>PSYC531 R Workshop 2 Code. R</code> file you downloaded from Canvas</p>
+find the <code>PSYC531 R Workshop 2 Code. R</code> file you downloaded from Canvas. It begins with the cleaning:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())         <span class="co"># clean start</span></span>
+<span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)   <span class="co"># full numbers, not 1.98e-08</span></span>
+</span></code></pre></div>
 <hr />
 <h2 id="1-a-dataset-to-practise-on">1. A dataset to practise on</h2>
 <p>R comes with practice datasets already built in, so nothing to
