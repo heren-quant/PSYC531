@@ -299,7 +299,7 @@ dataset yourself</h2>
 <p>For small studies you can type the data straight into R. The key tool
 is <code>c()</code>, which means "combine these values into a list":</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ID <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)                                <span class="co"># the numbers 1 through 10</span></span>
-<span>Pre-post <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>)</span>
+<span>Pre_post <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>, <span class="st">&quot;Pre&quot;</span>, <span class="st">&quot;Post&quot;</span>)</span>
 <span>SBP <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">150</span>, <span class="dv">148</span>, <span class="dv">145</span>, <span class="dv">142</span>, <span class="dv">140</span>, <span class="dv">137</span>, <span class="dv">135</span>, <span class="dv">132</span>, <span class="dv">130</span>, <span class="dv">128</span>)   <span class="co"># blood pressure</span></span>
 <span></span>
 <span>Name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Mike&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Tina&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;Herbert&quot;</span>, <span class="dv">2</span>),</span>
@@ -308,7 +308,7 @@ is <code>c()</code>, which means "combine these values into a list":</p>
 dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>TestData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> ID,</span>
 <span>                           <span class="at">Name =</span> Name,</span>
-<span>                           <span class="at">Pre-post =</span> Pre-post,</span>
+<span>                           <span class="at">Pre_post =</span> Pre_post,</span>
 <span>                           <span class="at">SBP =</span> SBP)</span>
 <span>TestData</span></code></pre></div>
 <details>
@@ -316,7 +316,7 @@ dataset:</p>
 
 <br>
 
-<pre><code>   ID     Name Pre-post SBP
+<pre><code>   ID     Name Pre_post SBP
 1   1     Mike             0 150
 2   2     Mike             1 148
 3   3     Tina             2 145
