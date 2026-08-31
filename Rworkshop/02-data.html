@@ -224,8 +224,7 @@ variable names. Press <strong>Tab</strong> to fill one in. Use this
 every time; it saves you from typos.</p>
 <hr />
 <h2 id="4-opening-your-own-data-file">4. Opening your own data file</h2>
-<p>When you have your own data, save it from Excel as a
-<strong>.csv</strong> file, put it in your <code>PSYC531</code> folder,
+<p>Download the <code>sesame.csv</code>code> from Canva and put it in your <code>PSYC531</code> folder,
 then tell R where to look:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># 1. tell R which folder to work in (yours will look different)</span></span>
 <span><span class="fu">setwd</span>(<span class="st">&quot;yourpath/PSYC531&quot;</span>)     <span class="co"># Windows</span></span>
@@ -235,7 +234,7 @@ then tell R where to look:</p>
 <span><span class="fu">list.files</span>()      <span class="co"># shows the files R can see — is your file listed?</span></span>
 <span></span>
 <span><span class="co"># 3. open the file</span></span>
-<span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;myfile.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
+<span>mydata <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;sesame.csv&quot;</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
 <span></span>
 <span><span class="co"># 4. always look at what arrived</span></span>
 <span><span class="fu">str</span>(mydata)</span>
