@@ -253,12 +253,15 @@ this.</p>
 <p>Base R covers the basics. Packages add more. Install once, load every
 session.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># Run this ONCE (needs internet):</span></span>
-<span><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;car&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;psych&quot;</span>))</span>
+<span><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;car&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;psych&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;Hmisc&quot;</span>, <span class="st">&quot;moments&quot;</span>))</span>
 <span></span>
 <span><span class="co"># Run this EVERY TIME you open R:</span></span>
 <span><span class="fu">library</span>(car)</span>
 <span><span class="fu">library</span>(ggplot2)</span>
-<span><span class="fu">library</span>(psych)</span></code></pre></div>
+<span><span class="fu">library</span>(psych)</span>
+<span><span class="fu">library</span>(dplyr)</span>
+<span><span class="fu">library</span>(Hmisc)</span>
+<span><span class="fu">library</span>(moments)</span></code></pre></div>
 <p>Notice the quotes: <strong>in quotes to install, no quotes to
 load.</strong></p>
 <p>After the first time, put a <code>#</code> in front of the
