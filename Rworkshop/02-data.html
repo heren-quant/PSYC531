@@ -346,7 +346,7 @@ second.</p>
 <span>TestData[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), ]     <span class="co"># rows 1 and 5</span></span>
 <span></span>
 <span>TestData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]              <span class="co"># columns by name — safer</span></span>
-<span>TestData[TestData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;</span> <span class="dv">5</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
+<span>TestData[TestData<span class="sc">$</span>Pre_post <span class="sc">==</span> <span class="st">&quot;Pre&quot;</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
 <p>Save any of these under a new name if you want to keep it:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>short_version <span class="ot">&lt;-</span> TestData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]</span>
 <span>short_version</span></code></pre></div>
