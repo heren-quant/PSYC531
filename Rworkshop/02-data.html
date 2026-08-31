@@ -306,11 +306,11 @@ is <code>c()</code>, which means "combine these values into a list":</p>
 <span>          <span class="fu">rep</span>(<span class="st">&quot;Yale&quot;</span>, <span class="dv">2</span>), <span class="fu">rep</span>(<span class="st">&quot;YOURNAME&quot;</span>, <span class="dv">2</span>))     <span class="co"># rep = repeat</span></span></code></pre></div>
 <p>Text goes in quotes; numbers do not. Now glue the columns into a
 dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> ID,</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>TestData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">ID =</span> ID,</span>
 <span>                           <span class="at">Name =</span> Name,</span>
 <span>                           <span class="at">Pre-post =</span> Pre-post,</span>
 <span>                           <span class="at">SBP =</span> SBP)</span>
-<span>ExerciseData</span></code></pre></div>
+<span>TestData</span></code></pre></div>
 <details>
 <summary><b>Show what you should see</b></summary>
 
@@ -338,17 +338,17 @@ columns</h2>
 <p>Square brackets take two things separated by a comma:
 <strong><code>[rows, columns]</code></strong>. Rows first, columns
 second.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>ExerciseData[<span class="dv">1</span>, ]      <span class="co"># row 1, all columns</span></span>
-<span>ExerciseData[, <span class="dv">2</span>]      <span class="co"># all rows, column 2</span></span>
-<span>ExerciseData[<span class="dv">1</span>, <span class="dv">2</span>]     <span class="co"># row 1, column 2 — one cell</span></span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>TestData[<span class="dv">1</span>, ]      <span class="co"># row 1, all columns</span></span>
+<span>TestData[, <span class="dv">2</span>]      <span class="co"># all rows, column 2</span></span>
+<span>TestData[<span class="dv">1</span>, <span class="dv">2</span>]     <span class="co"># row 1, column 2 — one cell</span></span>
 <span></span>
-<span>ExerciseData[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]     <span class="co"># columns 2 and 4</span></span>
-<span>ExerciseData[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), ]     <span class="co"># rows 1 and 5</span></span>
+<span>TestData[, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]     <span class="co"># columns 2 and 4</span></span>
+<span>TestData[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>), ]     <span class="co"># rows 1 and 5</span></span>
 <span></span>
-<span>ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]              <span class="co"># columns by name — safer</span></span>
-<span>ExerciseData[ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;</span> <span class="dv">5</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
+<span>TestData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]              <span class="co"># columns by name — safer</span></span>
+<span>TestData[TestData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;</span> <span class="dv">5</span>, ]   <span class="co"># only rows meeting a condition</span></span></code></pre></div>
 <p>Save any of these under a new name if you want to keep it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>short_version <span class="ot">&lt;-</span> ExerciseData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>short_version <span class="ot">&lt;-</span> TestData[, <span class="fu">c</span>(<span class="st">&quot;Name&quot;</span>, <span class="st">&quot;SBP&quot;</span>)]</span>
 <span>short_version</span></code></pre></div>
 <div class="note">
 <p class="note-label">Tip</p>
@@ -361,12 +361,12 @@ quietly analyses the wrong variable.</p>
 <hr />
 <h2 id="7-adding-a-new-variable">7. Adding a new variable</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># a calculated variable</span></span>
-<span>ExerciseData<span class="sc">$</span>SBP_change <span class="ot">&lt;-</span> ExerciseData<span class="sc">$</span>SBP <span class="sc">-</span> <span class="dv">150</span></span>
+<span>TestData<span class="sc">$</span>SBP_change <span class="ot">&lt;-</span> TestData<span class="sc">$</span>SBP <span class="sc">-</span> <span class="dv">150</span></span>
 <span></span>
 <span><span class="co"># a grouping variable: &quot;active&quot; if 5+ hours, otherwise &quot;less active&quot;</span></span>
-<span>ExerciseData<span class="sc">$</span>Group <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(ExerciseData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;=</span> <span class="dv">5</span>, <span class="st">&quot;active&quot;</span>, <span class="st">&quot;less active&quot;</span>)</span>
+<span>TestData<span class="sc">$</span>Group <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(TestData<span class="sc">$</span>ExerciseHours <span class="sc">&gt;=</span> <span class="dv">5</span>, <span class="st">&quot;active&quot;</span>, <span class="st">&quot;less active&quot;</span>)</span>
 <span></span>
-<span><span class="fu">table</span>(ExerciseData<span class="sc">$</span>Group)   <span class="co"># how many in each group</span></span></code></pre></div>
+<span><span class="fu">table</span>(TestData<span class="sc">$</span>Group)   <span class="co"># how many in each group</span></span></code></pre></div>
 <p><code>ifelse()</code> reads as: <em>if this is true, use the first
 answer, otherwise use the second.</em></p>
 <hr />
