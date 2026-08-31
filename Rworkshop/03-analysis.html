@@ -26,7 +26,7 @@ a:hover{text-decoration:underline}
 #toc li{margin:0 0 3px}
 #toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
 #toc a:hover{background:#f0f0f0;text-decoration:none}
-#toc .lesson{color:#888;font-size:12px}
+#toc .Workshop{color:#888;font-size:12px}
 #toc li.current>a{color:#0b60a8;font-weight:700}
 #toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
 #toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
@@ -103,13 +103,13 @@ ul.task-list input[type=checkbox]{margin-right:.5em}
   <ol>
 <li><a href="index.html">Introduction</a>
 </li>
-<li><a href="00-install.html"><span class="lesson">Lesson 0. </span>Install R and RStudio</a>
+<li><a href="00-install.html"><span class="Workshop">Workshop 0. </span>Install R and RStudio</a>
 </li>
-<li><a href="01-r-basics.html"><span class="lesson">Lesson 1. </span>R basics</a>
+<li><a href="01-r-basics.html"><span class="Workshop">Workshop 1. </span>R basics</a>
 </li>
-<li><a href="02-data.html"><span class="lesson">Lesson 2. </span>Working with data</a>
+<li><a href="02-data.html"><span class="Workshop">Workshop 2. </span>Working with data</a>
 </li>
-<li class="current"><a href="03-analysis.html"><span class="lesson">Lesson 3. </span>Statistics in R</a>
+<li class="current"><a href="03-analysis.html"><span class="Workshop">Workshop 3. </span>Statistics in R</a>
 <ol class="sub">
 <li><a href="#1-describing-one-variable">1. Describing one variable</a></li>
 <li><a href="#2-missing-values">2. Missing values</a></li>
@@ -123,23 +123,23 @@ need</a></li>
 <li><a href="#check-yourself">Check yourself</a></li>
 </ol>
 </li>
-<li><a href="04-exercises.html"><span class="lesson">Lesson 4. </span>Practice</a>
+<li><a href="04-exercises.html"><span class="Workshop">Workshop 4. </span>Practice</a>
 </li>
 </ol>
   <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
 </nav>
 <div id="page">
   <div id="content">
-    <h1>Lesson 3 — Statistics in R</h1>
-<p>In this lesson: describe a variable, draw a graph, and run a
+    <h1>Workshop 3 — Statistics in R</h1>
+<p>In this Workshop: describe a variable, draw a graph, and run a
 regression — and, more importantly, say in plain English what the output
 means.</p>
-<p>Start a new script called <code>lesson03.R</code> and begin with:</p>
+<p>Start a new script called <code>Workshop03.R</code> and begin with:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())         <span class="co"># clean start</span></span>
 <span><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">999</span>)   <span class="co"># full numbers, not 1.98e-08</span></span>
 <span><span class="fu">library</span>(psych)          <span class="co"># for quick descriptive tables</span></span></code></pre></div>
 <p>We are still using <code>attitude</code> (30 departments, workplace
-survey scores) from <a href="02-data.html">Lesson 2</a>.</p>
+survey scores) from <a href="02-data.html">Workshop 2</a>.</p>
 <hr />
 <h2 id="1-describing-one-variable">1. Describing one variable</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)      <span class="co"># average</span></span>
