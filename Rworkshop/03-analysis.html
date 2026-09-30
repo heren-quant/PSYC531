@@ -111,6 +111,7 @@ ul.task-list input[type=checkbox]{margin-right:.5em}
 </li>
 <li class="current"><a href="03-analysis.html"><span class="Workshop">Workshop 3. </span>Statistics in R</a>
 <ol class="sub">
+<li><a href="#0-read-data">0. Read data</a></li>
 <li><a href="#1-describing-one-variable">1. Describing one variable</a></li>
 <li><a href="#2-missing-values">2. Missing values</a></li>
 <li><a href="#3-graphs">3. Graphs</a></li>
@@ -139,6 +140,11 @@ regression.</p>
 <span><span class="fu">library</span>(psych)          <span class="co"># for quick descriptive tables</span></span></code></pre></div>
 <p>We are still using <code>attitude</code> (30 departments, workplace
 survey scores) from <a href="02-data.html">Workshop 2</a>.</p>
+<hr />
+<h2 id="0-read-data">0. Read data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
+<span><span class="fu">data</span>(attitude<span class="sc">$</span>rating)      <span class="co"># load data</span></span>
+<span><span class="fu">View</span>(attitude<span class="sc">$</span>rating)    <span class="co"># view data</span></span>
 <hr />
 <h2 id="1-describing-one-variable">1. Describing one variable</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu">mean</span>(attitude<span class="sc">$</span>rating)      <span class="co"># average</span></span>
