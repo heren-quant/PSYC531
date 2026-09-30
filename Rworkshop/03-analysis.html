@@ -180,9 +180,8 @@ from. It is a good habit and prevents a common source of confusing
 errors.</p>
 <h3 id="counting-categories">Counting categories</h3>
 <p>For a grouping variable, counts are what you want, not a mean:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-    <span>department_groups <- <span class="fu">c</span>(<span class="fu">rep</span>(1,15), <span class="fu">rep</span>(2,15))               <span class="co"># how many in each group</span></span>
-  <span><span class="fu">table</span>(department_groups)               <span class="co"># how many in each group</span></span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span>department_groups <- <span class="fu">c</span>(<span class="fu">rep</span>(1,15), <span class="fu">rep</span>(2,15))               <span class="co"># Example: The first 15 departments are from group 1, and the second 15 are from group 2</span></span>
+<span><span class="fu">table</span>(department_groups)               <span class="co"># how many in each group</span></span>
 <span><span class="fu">prop.table</span>(<span class="fu">table</span>(department_groups))   <span class="co"># as proportions</span></span>
 </code></pre></div>
 <hr />
