@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test analysis | PSYC531 Introduction to R</title>
+<style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .Workshop{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+</style>
+</head>
+<body>
+<nav id="toc">
+  <a class="title" href="index.html">PSYC531</a>
+  <p class="subtitle">Introduction to R</p>
+  <ol>
+<li><a href="index.html">Introduction</a>
+</li>
+<li><a href="00-install.html"><span class="Workshop">Workshop 0. </span>Install R and RStudio</a>
+</li>
+<li><a href="01-r-basics.html"><span class="Workshop">Workshop 1. </span>R basics</a>
+</li>
+<li><a href="02-data.html"><span class="Workshop">Workshop 2. </span>Working with data</a>
+</li>
+<li><a href="03-analysis.html"><span class="Workshop">Workshop 3. </span>Statistics in R</a>
+</li>
+<li class="current"><a href="04-test-analysis.html"><span class="Workshop">Workshop 4. </span>Test analysis</a>
+<ol class="sub">
+<li><a href="#setup">Before you start</a></li>
+<li><a href="#read-survey">1. Read the survey</a></li>
+<li><a href="#describe-items">2. Describe the items</a></li>
+<li><a href="#average-score">3. One average score per person</a></li>
+<li><a href="#reliability">4. Reliability</a></li>
+<li><a href="#validity">5. Validity</a></li>
+<li><a href="#complete-script">The complete script</a></li>
+</ol>
+</li>
+</ol>
+  <p class="foot">R 4.6.1<br>RStudio 2026.08.0</p>
+</nav>
+<div id="page">
+  <div id="content">
+<h1>Workshop 4 — Test analysis</h1>
+<p>How do we turn survey answers into a test score, and how do we check whether that score is useful? We will use five neuroticism items from the <code>bfi</code> dataset in <code>psych</code> to describe the items, calculate a score, examine reliability, and check a prediction about validity.</p>
+<p>Open a new R script called <code>Workshop04.R</code>. Run each section in order.</p>
+<hr />
+<h2 id="setup">Before you start</h2>
+<p>Start with an empty workspace and load <code>psych</code>. If you have not installed it, run <code>install.packages("psych")</code> once first.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fu">rm</span>(list = <span class="fu">ls</span>())         <span class="co"># clean start</span>
+<span class="fu">options</span>(scipen = <span class="dv">999</span>)   <span class="co"># print full numbers</span>
+<span class="fu">library</span>(psych)          <span class="co"># for alpha() and the data</span></code></pre></div>
+<div class="note"><p class="note-label">Clean start</p><p><code>rm(list = ls())</code> removes objects from your current R workspace. Save anything you need before running it. <code>options(scipen = 999)</code> discourages scientific notation; it does not change the calculations.</p></div>
+<hr />
+<h2 id="read-survey">1. Read the survey</h2>
+<p><code>data(bfi)</code> loads the example data, so no CSV file is needed. Each row is a person. We keep only the five neuroticism items, <code>N1</code> to <code>N5</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. Read the survey ----</span>
+<span class="fu">data</span>(bfi)
+survey <span class="ot">&lt;-</span> bfi[, <span class="fu">c</span>(<span class="st">&quot;N1&quot;</span>, <span class="st">&quot;N2&quot;</span>, <span class="st">&quot;N3&quot;</span>, <span class="st">&quot;N4&quot;</span>, <span class="st">&quot;N5&quot;</span>)]
+<span class="fu">head</span>(survey)            <span class="co"># first six people</span></code></pre></div>
+<p>The items use a 1–6 response scale, from very inaccurate to very accurate. Higher responses on these five items indicate higher neuroticism; these items do not need reverse scoring. See the <a href="https://personality-project.org/r/psych/help/bfi.html">dataset documentation</a> for the item wording and scoring key.</p>
+<p>In <code>bfi[, c(...)]</code>, the blank before the comma keeps every row, and the names after the comma select the columns. <code>head(survey)</code> shows the first six people.</p>
+<hr />
+<h2 id="describe-items">2. Describe the items</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2. Describing the items ----</span>
+psych<span class="sc">::</span><span class="fu">describe</span>(survey)</code></pre></div>
+<p>There is one output row for each item. Start with these columns:</p>
+<table><thead><tr><th>Column</th><th>What it tells you</th></tr></thead><tbody>
+<tr><td><code>n</code></td><td>Number of non-missing responses for the item.</td></tr>
+<tr><td><code>mean</code></td><td>Average response.</td></tr>
+<tr><td><code>sd</code></td><td>How much responses vary.</td></tr>
+<tr><td><code>min</code>, <code>max</code></td><td>Lowest and highest observed responses. Check that they fall between 1 and 6.</td></tr>
+</tbody></table>
+<p>Different values of <code>n</code> tell you that some people skipped different items.</p>
+<hr />
+<h2 id="average-score">3. One average score per person</h2>
+<p><code>rowMeans()</code> works across each row to give one average score per person.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 3. One average score per person ----</span>
+average_score <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(survey, na.rm = <span class="cn">TRUE</span>)
+
+psych<span class="sc">::</span><span class="fu">describe</span>(average_score)
+<span class="fu">hist</span>(average_score,
+     main = <span class="st">&quot;Neuroticism scores&quot;</span>,
+     xlab = <span class="st">&quot;Average of 5 items (1-6)&quot;</span>,
+     col = <span class="st">&quot;lightblue&quot;</span>)</code></pre></div>
+<p><code>na.rm = TRUE</code> averages the available responses when someone skips an item. If every item is missing, the result is <code>NaN</code>. This practice script does not require a minimum number of answered items; a real scoring plan should specify one.</p>
+<p>The average stays on the 1–6 scale. In this dataset, <em>M</em> = 3.16 and <em>SD</em> = 1.20. The histogram shows how these scores are distributed across people.</p>
+<hr />
+<h2 id="reliability">4. Reliability</h2>
+<p>Internal consistency asks whether the items tend to work together as a scale.</p>
+<h3>Item correlations</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 4. Reliability ----</span>
+<span class="co">## Item correlation ----</span>
+<span class="fu">round</span>(<span class="fu">cor</span>(survey, use = <span class="st">&quot;pairwise&quot;</span>), <span class="dv">2</span>)</code></pre></div>
+<p>Look at the correlations away from the diagonal. Positive values mean that people who score higher on one item tend to score higher on another. The diagonal is always 1 because each item is correlated with itself.</p>
+<p><code>use = "pairwise"</code> uses the available responses for each pair of items. <code>round(..., 2)</code> displays two decimal places.</p>
+<h3>Cronbach’s alpha</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">## Cronbach&#x27;s alpha ----</span>
+psych<span class="sc">::</span><span class="fu">alpha</span>(survey)</code></pre></div>
+<p>The output is long. For this workshop, focus on <code>raw_alpha</code> in the first summary table: approximately <strong>0.81</strong>.</p>
+<table><thead><tr><th>Alpha</th><th>Rough guide</th></tr></thead><tbody>
+<tr><td>Below .60</td><td>Poor internal consistency.</td></tr>
+<tr><td>Around .70</td><td>Acceptable internal consistency.</td></tr>
+<tr><td>.80 or above</td><td>Good internal consistency.</td></tr>
+</tbody></table>
+<p>These are classroom guidelines, not universal cutoffs. Interpretation depends on the purpose of the score and the number of items.</p>
+<p><strong>Write-up:</strong> The five neuroticism items showed good internal consistency, Cronbach’s α = .81.</p>
+<div class="note"><p class="note-label">Reliability and validity</p><p>Alpha describes how consistently the items work together. A high alpha alone does not show that they measure the intended construct. The <a href="https://personality-project.org/r/psych/help/alpha.html">alpha documentation</a> explains the other output fields.</p></div>
+<hr />
+<h2 id="validity">5. Validity</h2>
+<p>Does the score relate to other things as expected? For this workshop, predict a small negative correlation between neuroticism and age: older people are expected to score a little lower.</p>
+<p>Donnellan and Lucas (2008) found a slight negative association in their British sample, but a slight positive association in their German sample. The evidence was mixed, so treat the negative relationship as a prediction to check.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 5. Validity ----</span>
+<span class="co"># Prediction: a small negative correlation with age.</span>
+<span class="fu">cor.test</span>(average_score, bfi<span class="sc">$</span>age)</code></pre></div>
+<p><code>bfi$age</code> selects age from the original dataset. Its rows still match the people in <code>average_score</code>. <code>cor.test()</code> runs a Pearson correlation and uses people with both a score and an age.</p>
+<table><thead><tr><th>Output</th><th>Result</th><th>Interpretation</th></tr></thead><tbody>
+<tr><td><code>cor</code></td><td>−0.117</td><td>A small negative association.</td></tr>
+<tr><td><code>p-value</code></td><td>&lt; .001</td><td>Evidence against a zero population correlation.</td></tr>
+<tr><td>95% confidence interval</td><td>[−0.154, −0.081]</td><td>The interval is entirely below zero.</td></tr>
+</tbody></table>
+<p><strong>Write-up:</strong> Neuroticism scores were slightly negatively associated with age, <em>r</em>(2798) = −.12, <em>p</em> &lt; .001. Older participants tended to report slightly lower neuroticism.</p>
+<p>This result is consistent with our prediction and provides one piece of validity evidence. It does not establish validity on its own, and a comparison of different people does not show that a person’s neuroticism decreases as they age.</p>
+<p><strong>Reference:</strong> Donnellan, M. B., &amp; Lucas, R. E. (2008). Age differences in the Big Five across the life span: Evidence from two national samples. <em>Psychology and Aging, 23</em>(3), 558–566. <a href="https://doi.org/10.1037/a0012897">https://doi.org/10.1037/a0012897</a>.</p>
+
+<div class="pager">
+<a class="prev" href="03-analysis.html">← Statistics in R</a>
+</div>
+</div>
+</body>
+</html>
