@@ -113,6 +113,8 @@ ul.task-list input[type=checkbox]{margin-right:.5em}
 </li>
 <li class="current"><a href="04-test-analysis.html"><span class="Workshop">Workshop 4. </span>Test analysis</a>
 <ol class="sub">
+<li><a href="#about-bfi">About the bfi dataset</a></li>
+<li><a href="#reverse-coding">Reverse coding</a></li>
 <li><a href="#setup">Before you start</a></li>
 <li><a href="#read-survey">1. Read the survey</a></li>
 <li><a href="#describe-items">2. Describe the items</a></li>
@@ -130,6 +132,56 @@ ul.task-list input[type=checkbox]{margin-right:.5em}
 <h1>Workshop 4 — Test analysis</h1>
 <p>How do we turn survey answers into a test score, and how do we check whether that score is useful? We will use five neuroticism items from the <code>bfi</code> dataset in <code>psych</code> to describe the items, calculate a score, examine reliability, and check a prediction about validity.</p>
 <p>Open a new R script called <code>Workshop04.R</code>. Run each section in order.</p>
+<hr />
+<h2 id="about-bfi">About the bfi dataset</h2>
+<p>The <code>bfi</code> dataset contains responses from <strong>2,800 people</strong> collected through the Synthetic Aperture Personality Assessment (SAPA) project. It is included as an example dataset for learning about personality measurement.</p>
+<p>Each row represents one person. The dataset has <strong>28 columns</strong>: 25 personality items and three demographic variables, <code>gender</code>, <code>education</code>, and <code>age</code>. The personality items come from the International Personality Item Pool (IPIP), with five items for each of the Big Five traits:</p>
+<table>
+<thead><tr><th>Trait</th><th>Columns</th><th>What it describes</th><th>Reverse-code</th></tr></thead>
+<tbody>
+<tr><td>Agreeableness</td><td><code>A1</code>–<code>A5</code></td><td>Being considerate and cooperative with others.</td><td><code>A1</code></td></tr>
+<tr><td>Conscientiousness</td><td><code>C1</code>–<code>C5</code></td><td>Being organized, responsible, and self-disciplined.</td><td><code>C4</code>, <code>C5</code></td></tr>
+<tr><td>Extraversion</td><td><code>E1</code>–<code>E5</code></td><td>Being sociable, outgoing, and assertive.</td><td><code>E1</code>, <code>E2</code></td></tr>
+<tr><td>Neuroticism</td><td><code>N1</code>–<code>N5</code></td><td>A tendency to experience negative emotions, such as worry or irritability.</td><td>None</td></tr>
+<tr><td>Openness</td><td><code>O1</code>–<code>O5</code></td><td>Being curious and receptive to ideas and experiences.</td><td><code>O2</code>, <code>O5</code></td></tr>
+</tbody>
+</table>
+<p>The remaining columns describe the participants rather than personality traits:</p>
+<table>
+<thead><tr><th>Column</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>gender</code></td><td>Recorded in this dataset as 1 = male and 2 = female.</td></tr>
+<tr><td><code>education</code></td><td>Education category: 1 = high school; 2 = finished high school; 3 = some college; 4 = college graduate; 5 = graduate degree.</td></tr>
+<tr><td><code>age</code></td><td>Age in years.</td></tr>
+</tbody>
+</table>
+<p>Participants rated how accurately each statement described them on a six-point scale:</p>
+<table>
+<thead><tr><th>Response</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Very inaccurate</td></tr>
+<tr><td>2</td><td>Moderately inaccurate</td></tr>
+<tr><td>3</td><td>Slightly inaccurate</td></tr>
+<tr><td>4</td><td>Slightly accurate</td></tr>
+<tr><td>5</td><td>Moderately accurate</td></tr>
+<tr><td>6</td><td>Very accurate</td></tr>
+</tbody>
+</table>
+<h3 id="reverse-coding">Which items need reverse coding?</h3>
+<p>To make higher scores consistently indicate more of each trait, reverse-code <strong>A1, C4, C5, E1, E2, O2, and O5</strong> before calculating trait averages or examining internal consistency. Keep the other personality items in their original direction. Demographic columns are not part of the trait scores.</p>
+<p>These seven items are worded in the opposite direction from their trait. For example, agreeing that you do not talk much indicates lower extraversion. Reversing that response makes its scoring direction match the other extraversion items.</p>
+<p>For a 1–6 scale, use <strong>reversed score = 7 − original score</strong>: 1 becomes 6, 2 becomes 5, and 3 becomes 4 (and vice versa). A missing response stays missing.</p>
+<details>
+<summary>Optional example: reverse-code all seven items in a separate copy</summary>
+<p>Run this after loading <code>bfi</code>. Creating a fresh copy each time preserves the original responses and prevents accidentally reversing an already reversed score.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bfi_scored <span class="ot">&lt;-</span> bfi
+reverse_items <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"A1"</span>, <span class="st">"C4"</span>, <span class="st">"C5"</span>, <span class="st">"E1"</span>, <span class="st">"E2"</span>, <span class="st">"O2"</span>, <span class="st">"O5"</span>)
+bfi_scored[reverse_items] <span class="ot">&lt;-</span> <span class="dv">7</span> - bfi_scored[reverse_items]</code></pre></div>
+<p>Use the five columns for the trait you want from <code>bfi_scored</code>. Do not average all 25 items into a single Big Five score.</p>
+</details>
+<div class="note"><p class="note-label">For this workshop</p><p><strong>None of N1–N5 needs reverse coding.</strong> Higher original responses already indicate greater neuroticism, so the analysis below uses these five columns directly from <code>bfi</code>.</p></div>
+<p>Some responses are missing and appear as <code>NA</code> in R. We will use the five neuroticism items to create a score, then examine its relationship with age in years.</p>
+<p>Source: <a href="https://personality-project.org/r/psych/help/bfi.html">bfi dataset documentation</a>. Despite its name, this dataset should not be confused with the separately developed Big Five Inventory questionnaire.</p>
 <hr />
 <h2 id="setup">Before you start</h2>
 <p>Start with an empty workspace and load <code>psych</code>. If you have not installed it, run <code>install.packages("psych")</code> once first.</p>
