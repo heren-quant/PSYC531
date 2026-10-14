@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Item analysis | PSYC531 Introduction to R</title><style>
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:#fff;color:#333;
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.62;
+}
+a{color:#0b60a8;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* sidebar */
+#toc{
+  position:fixed;top:0;left:0;width:270px;height:100%;overflow-y:auto;
+  background:#fafafa;border-right:1px solid #e5e5e5;padding:24px 18px 40px;font-size:14px;
+}
+#toc .title{font-size:15px;font-weight:700;color:#222;display:block;margin-bottom:2px}
+#toc .title:hover{text-decoration:none}
+#toc .subtitle{color:#777;font-size:13px;margin:0 0 18px}
+#toc ol{list-style:none;margin:0;padding:0}
+#toc li{margin:0 0 3px}
+#toc a{color:#444;display:block;padding:4px 6px;border-radius:3px}
+#toc a:hover{background:#f0f0f0;text-decoration:none}
+#toc .Workshop{color:#888;font-size:12px}
+#toc li.current>a{color:#0b60a8;font-weight:700}
+#toc ol.sub{margin:2px 0 8px 12px;padding-left:10px;border-left:1px solid #e0e0e0}
+#toc ol.sub a{color:#666;font-size:13px;padding:3px 6px}
+#toc .foot{margin-top:24px;padding-top:14px;border-top:1px solid #e5e5e5;color:#888;font-size:12.5px}
+
+/* content */
+#page{margin-left:270px;padding:34px 40px 70px}
+#content{max-width:44rem}
+h1{font-size:1.85em;font-weight:700;line-height:1.25;margin:0 0 1em}
+h2{font-size:1.32em;font-weight:700;margin:1.7em 0 .7em}
+h3{font-size:1.08em;font-weight:700;margin:1.5em 0 .5em}
+p,ul,ol,table,pre,blockquote{margin:0 0 1em}
+ul,ol{padding-left:1.5em}
+li{margin-bottom:.3em}
+hr{border:none;border-top:1px solid #ebebeb;margin:2.1em 0}
+img{max-width:100%;height:auto;border:1px solid #ddd;display:block;margin:1.2em 0}
+blockquote{border-left:3px solid #e0e0e0;padding-left:1em;color:#666}
+
+/* code */
+code{font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:.875em}
+p code,li code,td code,h2 code,h3 code,summary code{background:#f4f4f4;padding:1px 4px;border-radius:3px}
+pre{background:#f7f7f7;border:1px solid #e6e6e6;border-radius:3px;padding:11px 13px;overflow-x:auto;line-height:1.55}
+pre code{background:none;padding:0;white-space:pre}
+.sourceCode .co{color:#6d7a6d;font-style:italic}
+.sourceCode .st{color:#0a7b3e}
+.sourceCode .dv,.sourceCode .fl,.sourceCode .bn{color:#6f42c1}
+.sourceCode .fu{color:#005cc5}
+.sourceCode .ot,.sourceCode .sc,.sourceCode .op{color:#b3457a}
+.sourceCode .cn,.sourceCode .kw,.sourceCode .cf{color:#b21f2d}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.94em}
+th,td{border:1px solid #e2e2e2;padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#f7f7f7;font-weight:700}
+
+/* notes */
+.note{border:1px solid #e6e6e6;border-left:3px solid #b8b8b8;background:#fafafa;padding:11px 14px 1px;margin:0 0 1.2em}
+.note>*:last-child{margin-bottom:11px}
+.note-label{font-weight:700;font-size:.83em;letter-spacing:.04em;text-transform:uppercase;color:#666;margin:0 0 .45em}
+
+/* show/hide answers */
+details{margin:0 0 1.2em}
+summary{cursor:pointer;color:#0b60a8;font-weight:600;padding:2px 0}
+summary:hover{text-decoration:underline}
+details[open]>*:not(summary){margin-left:14px;padding-left:12px;border-left:2px solid #ebebeb}
+details br:first-of-type{display:none}
+details b{font-weight:600}
+
+/* checklists */
+ul.task-list{list-style:none;padding-left:.2em}
+ul.task-list input[type=checkbox]{margin-right:.5em}
+
+/* prev / next */
+.pager{margin-top:2.6em;padding-top:14px;border-top:1px solid #ebebeb;font-size:.94em;
+       display:flex;justify-content:space-between;gap:16px}
+.pager .next{margin-left:auto;text-align:right}
+
+@media(max-width:860px){
+  #toc{position:static;width:auto;height:auto;border-right:none;border-bottom:1px solid #e5e5e5;padding:18px}
+  #toc ol.sub{display:none}
+  #page{margin-left:0;padding:22px 18px 50px}
+}
+@media print{
+  #toc,.pager{display:none}
+  #page{margin:0;padding:0}
+  details[open]>*:not(summary),details>*:not(summary){display:block}
+}
+
+*{box-sizing:border-box} #page{margin-left:306px} #toc{width:306px}
+#content{max-width:48rem} .time{font-size:.8em;font-weight:400;color:#777;white-space:nowrap}
+.formula{background:#f1f6fa;border-left:3px solid #0b60a8;padding:12px 16px;font-size:1.08em}
+.table-scroll{overflow-x:auto;margin-bottom:1em}.table-scroll table{margin:0}
+.resources{padding:12px 16px;background:#f7f7f7;border:1px solid #e6e6e6}
+button{font:inherit;cursor:pointer;border:1px solid #c9c9c9;background:#fff;padding:5px 10px;border-radius:3px;color:#0b60a8}
+@media(max-width:860px){#toc{width:auto}#page{margin-left:0}}
+@media print{#page{margin:0}.resources,button{display:none}pre{white-space:pre-wrap;overflow-wrap:anywhere}pre code{white-space:pre-wrap}h2,h3{break-after:avoid}tr{break-inside:avoid}}
+</style></head><body><nav id="toc" aria-label="Workshop contents"><a class="title" href="05-item-analysis.html">PSYC531</a><p class="subtitle">Introduction to R</p><ol><li class="current"><a href="05-item-analysis.html"><span class="Workshop">Workshop 5. </span>Item analysis</a><ol class="sub"><li><a href="#about">About the LSAT6 data</a></li><li><a href="#setup">Before you start</a></li><li><a href="#read">1. Read the item data</a></li><li><a href="#difficulty">2. Item difficulty</a></li><li><a href="#discrimination">3. Item discrimination</a></li><li style="margin-left:12px"><a href="#groups">3.1 Upper–lower difference</a></li><li style="margin-left:12px"><a href="#correlations">3.2 Item/total score correlation</a></li><li><a href="#reliability">4. Item reliability</a></li><li><a href="#decisions">5. Interpret the results</a></li><li><a href="#check">Check yourself</a></li></ol></li></ol><p class="foot">Companion to Workshops 1–4<br>R package: psych<br>No separate data file needed</p></nav><main id="page"><div id="content"><h1>Workshop 5 — Item analysis</h1>
+<p>In this workshop: practise item difficulty and two measures of discrimination, then learn to calculate and interpret the <strong>item reliability index</strong>.</p>
+<p>Open a new R script called <code>Workshop05.R</code>. Run each section in order. The data come with <code>psych</code>; no separate data file is needed.</p><h2 id="about">About the LSAT6 data</h2>
+<p>The <strong>Law School Admission Test (LSAT)</strong> is used in law school admission. Our historical example, <code>lsat6</code>, contains responses from <strong>1,000 people to five Figure Classification items</strong>, analysed by Bock and Lieberman (1970). The “6” identifies the section, not the number of items.</p>
+<div class="table-scroll"><table><thead><tr><th>In the dataset</th><th>Meaning</th></tr></thead><tbody><tr><td>Each row</td><td>One person’s responses.</td></tr><tr><td>Q1–Q5</td><td>The five items: 1 = correct, 0 = incorrect.</td></tr><tr><td>Total score</td><td>Number correct across these five items, from 0 to 5.</td></tr></tbody></table></div>
+<p>For example, <code>1, 0, 1, 1, 0</code> gives a total of 3. There are no missing responses. The data contain scored answers, not question wording. Our five-item total is not an official scaled LSAT score.</p><h2 id="setup">Before you start</h2><p>Use <code>psych</code> from Workshop 4. If needed, install it once with <code>install.packages("psych")</code>.</p><pre><code># Before you start ----
+# Run once if needed: install.packages(&quot;psych&quot;)
+library(psych)         # load the package used in Workshop 4
+options(scipen = 999)  # show ordinary numbers</code></pre><h2 id="read">1. Read the item data</h2><pre><code># 1. Read the item data ----
+data(bock, package = &quot;psych&quot;)     # loads the LSAT example datasets
+items &lt;- as.data.frame(lsat6)     # keep section 6 as a data table
+head(items)                      # look at the first six people
+dim(items)                       # number of people and items
+sum(is.na(items))                 # count missing responses
+
+total &lt;- rowSums(items)           # add the five scores for each person
+table(total)                     # count people at each total score</code></pre><p><code>data(bock)</code> loads the LSAT datasets. <code>as.data.frame()</code> makes a table we can use with <code>$</code>; <code>rowSums()</code> adds each person’s item scores.</p><details><summary>Show what you should see</summary><p>You should see 1,000 rows, five columns, no missing responses, and totals from 0 to 5.</p></details><h2 id="difficulty">2. Item difficulty</h2><p>For a 0/1 item, the mean is the <strong>proportion correct</strong>, <em>p</em>. Higher p means easier. It is not a significance-test p-value.</p><pre><code># 2. Item difficulty ----
+mean(items$Q3)                    # proportion correct on Q3
+p &lt;- colMeans(items)              # proportion correct on every item
+round(p, 3)                      # display three decimal places</code></pre><p><code>colMeans()</code> finds each column’s mean; <code>round(..., 3)</code> displays three decimals.</p>
+<p><strong>Try it:</strong> identify the easiest and hardest items.</p><details><summary>Show answer</summary><p>Q1 is easiest (p = .924); Q3 is hardest (p = .553). These values describe this sample.</p></details><h2 id="discrimination">3. Item discrimination</h2><p>Do people with higher total scores tend to get an item right? We will examine this in two ways.</p><h3 id="groups">3.1 Upper–lower difference</h3><p>Use the one-third and two-thirds score cutoffs, <strong>3 and 4</strong>. Keep tied scores together, giving groups close to thirds:</p><div class="table-scroll"><table><thead><tr><th>Group</th><th>Total score</th><th>People</th></tr></thead><tbody><tr><td>Lower</td><td>0–3</td><td>345</td></tr><tr><td>Middle</td><td>4</td><td>357</td></tr><tr><td>Upper</td><td>5</td><td>298</td></tr></tbody></table></div><p class="formula">D = p<sub>upper</sub> − p<sub>lower</sub></p><pre><code># 3. Item discrimination ----
+# 3.1 Upper-lower difference ----
+quantile(total, probs = c(1/3, 2/3))  # find the cutoff scores: 3 and 4
+
+lower &lt;- items[total &lt;= 3, ]          # lower group: total scores 0 to 3
+upper &lt;- items[total &gt; 4, ]           # upper group: total score 5
+nrow(lower)                          # 345 people in the lower group
+nrow(upper)                          # 298 people in the upper group
+
+p_lower &lt;- colMeans(lower)           # proportion correct in the lower group
+p_upper &lt;- colMeans(upper)           # proportion correct in the upper group
+D &lt;- p_upper - p_lower               # upper minus lower proportion
+
+round(data.frame(p_upper, p_lower, D), 3)  # show the three columns</code></pre><p><code>quantile()</code> finds the cutoff scores. In <code>items[total &lt;= 3, ]</code>, the condition selects rows and the blank after the comma keeps all columns. Each group’s mean uses its own size as the denominator; the middle group is excluded.</p><details><summary>Show what you should see</summary><div class="table-scroll"><table><thead><tr><th>Item</th><th>p_upper</th><th>p_lower</th><th>D</th></tr></thead><tbody><tr><td>Q1</td><td>1.000</td><td>0.823</td><td>0.177</td></tr><tr><td>Q2</td><td>1.000</td><td>0.388</td><td>0.612</td></tr><tr><td>Q3</td><td>1.000</td><td>0.206</td><td>0.794</td></tr><tr><td>Q4</td><td>1.000</td><td>0.490</td><td>0.510</td></tr><tr><td>Q5</td><td>1.000</td><td>0.704</td><td>0.296</td></tr></tbody></table></div></details><p><strong>Try it:</strong> Q3 was correct for 298/298 people in the upper group and 71/345 in the lower group. Calculate and interpret D.</p><details><summary>Show answer</summary><p>D = 1 − 71/345 = .794: the upper group’s proportion correct was 79.4 percentage points higher.</p></details><p>Positive D means the upper group performed better; near zero means little difference; negative D means the lower group performed better and warrants checking the item.</p><div class="note"><p class="note-label">Note</p><p>All upper-group members scored 5/5, so p_upper is 1 for every item. Use the same groups for all items; different cutoff rules can change D.</p></div><h3 id="correlations">3.2 Item/total score correlation</h3><p>Correlate the 0/1 item score with the <strong>full total score</strong>. Pearson’s correlation for a binary item is called the <strong>point-biserial correlation</strong>, so we can use <code>cor()</code> directly.</p><pre><code># 3.2 Item/total score correlation ----
+cor(items$Q3, total)  # point-biserial correlation for Q3</code></pre><p>Q3 gives r = .618: people who got it right tended to have higher totals. Now repeat for all five items:</p><pre><code># Calculate the item-total correlation for each item.
+r_total &lt;- c(
+  Q1 = cor(items$Q1, total),  # Q1 score and full total
+  Q2 = cor(items$Q2, total),  # Q2 score and full total
+  Q3 = cor(items$Q3, total),  # Q3 score and full total
+  Q4 = cor(items$Q4, total),  # Q4 score and full total
+  Q5 = cor(items$Q5, total)   # Q5 score and full total
+)
+round(r_total, 3)            # display the five correlations</code></pre><p>A positive r indicates the expected relationship; near zero indicates little association; negative r indicates the opposite pattern. Unlike D, r uses everyone.</p><div class="note"><p class="note-label">Note</p><p>The total includes the item itself, so the two scores overlap. If an item has no variation, its correlation is undefined.</p></div><h2 id="reliability">4. Item reliability</h2><p>Test reliability concerns consistency of test scores. The classical <strong>item reliability index</strong> combines how much an item varies with how strongly it relates to the total:</p>
+<p class="formula">Item reliability index = item SD × item–total correlation</p>
+<p>For example, SD = .50 and r = .60 give an index of .30. An item almost everyone gets right has little variation, so it contributes little to separating people.</p><pre><code># 4. Item reliability index ----
+item_stats &lt;- psych::describe(items)  # descriptive statistics for each item
+item_sd &lt;- item_stats$sd              # standard deviation of each item
+names(item_sd) &lt;- names(items)    # label the values Q1 to Q5
+IRI &lt;- item_sd * r_total          # use the correlations from Section 3.2
+
+round(data.frame(item_sd, r_total, IRI), 3)  # show the ingredients and index</code></pre><p><code>psych::describe()</code> supplies each item’s SD. We multiply it by <code>r_total</code> from Section 3.2.</p><details><summary>Show what you should see</summary><div class="table-scroll"><table><thead><tr><th>Item</th><th>item_sd</th><th>r_total</th><th>IRI</th></tr></thead><tbody><tr><td>Q1</td><td>0.265</td><td>0.362</td><td>0.096</td></tr><tr><td>Q2</td><td>0.454</td><td>0.567</td><td>0.258</td></tr><tr><td>Q3</td><td>0.497</td><td>0.618</td><td>0.308</td></tr><tr><td>Q4</td><td>0.425</td><td>0.534</td><td>0.227</td></tr><tr><td>Q5</td><td>0.336</td><td>0.435</td><td>0.146</td></tr></tbody></table></div></details><p><strong>Try it:</strong> why is Q1’s index smaller than Q3’s?</p><details><summary>Show answer</summary><p>Q1 has less variation and a weaker item–total relationship: .265 × .362 ≈ .096, compared with .497 × .618 ≈ .308 for Q3.</p></details><div class="note"><p class="note-label">Note</p><p>An index of .30 does not mean “30% reliable.” It is an item-analysis index, not a proportion of reliable variance or a test–retest estimate.</p></div><h2 id="decisions">5. Interpret the results</h2><pre><code># 5. A summary table for the LSAT items ----
+item_results &lt;- data.frame(p, D, r_total, IRI)  # combine the results
+round(item_results, 3)                         # display the table</code></pre><details><summary>Show what you should see</summary><div class="table-scroll"><table><thead><tr><th>Item</th><th>p</th><th>D</th><th>r_total</th><th>IRI</th></tr></thead><tbody><tr><td>Q1</td><td>0.924</td><td>0.177</td><td>0.362</td><td>0.096</td></tr><tr><td>Q2</td><td>0.709</td><td>0.612</td><td>0.567</td><td>0.258</td></tr><tr><td>Q3</td><td>0.553</td><td>0.794</td><td>0.618</td><td>0.308</td></tr><tr><td>Q4</td><td>0.763</td><td>0.510</td><td>0.534</td><td>0.227</td></tr><tr><td>Q5</td><td>0.870</td><td>0.296</td><td>0.435</td><td>0.146</td></tr></tbody></table></div></details><p><strong>Discuss:</strong> must Q1 be removed because it is easy? Must Q3 be retained because its statistics are larger? What other information do you need?</p><details><summary>Show possible answer</summary><p>Neither decision follows automatically. Review the wording, answer key, content coverage, and test purpose. An easy item may assess essential knowledge; a large statistic does not guarantee relevant content.</p></details><p><strong>Example write-up:</strong> Q3 had p = .553, upper–lower discrimination D = .794 using cutoffs 3 and 4, item–total r = .618, and an item reliability index of .308. Content review is also needed.</p><details><summary>Optional: connect back to test reliability</summary><pre><code># Optional: connect back to test reliability ----
+analysis &lt;- psych::alpha(items, check.keys = FALSE)  # keep original scoring
+analysis$total$raw_alpha                    # alpha for all five LSAT items
+round(analysis$alpha.drop$raw_alpha, 3)      # alpha without Q1, then Q2, etc.</code></pre><p>Alpha is about .295 for this five-item set; removing any one item lowers it. Alpha describes a set of items, not a single item. This is not the reliability of the full LSAT.</p></details><h2 id="check">Check yourself</h2><ol><li>An item has p = .90. Is it easy or hard?</li><li>p_upper = .80 and p_lower = .30. What is D?</li><li>What two variables go into the item–total correlation?</li><li>Item SD = .40 and item–total r = .50. What is the item reliability index, and does it mean “20% reliable”?</li></ol><details><summary>Show answers</summary><ol><li>Easy: 90% answered correctly.</li><li>D = .50.</li><li>The item’s 0/1 scores and the full total scores, using all people.</li><li>.40 × .50 = .20. No: the index is not a percentage of reliable variance.</li></ol></details>
+<details><summary>Sources and dataset help</summary><ul>
+<li>Bock, R. D., &amp; Lieberman, M. (1970). Fitting a response model for dichotomously scored items. <em>Psychometrika, 35</em>, 179–197. In R: <code>help("bock", package = "psych")</code>.</li>
+<li><a href="https://www.lsac.org/lsat/about">LSAC: About the LSAT</a>.</li>
+<li><a href="https://personality-project.org/r/psych/help/alpha.html">psych alpha documentation</a>.</li>
+<li><a href="https://www.ets.org/research/policy_research_reports/publications/report/1964/hoze.html">Myers (1964), Item Analysis and Test Reliability</a>; <a href="https://cran.r-project.org/web/packages/psychometric/psychometric.pdf#page=35">Fletcher, item.exam documentation</a>. No additional package is needed.</li></ul></details>
+<div class="pager"><a class="next" href="05-instructor-notes.html">Instructor notes →</a></div></div></main></body></html>
